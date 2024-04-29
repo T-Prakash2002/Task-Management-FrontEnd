@@ -1,4 +1,5 @@
 
+export const apiuri =`http://localhost:4000`;
 
 
 export const mentors = [
