@@ -1,0 +1,9 @@
+
+#root{
+    margin: 5px;
+    padding: 5px;
+    border: 1px solid rgb(7, 90, 65);
+    border-radius:10px ;
+    box-shadow:0 0 4px rgb(121, 207, 180);
+    min-height: 99vh;
+}

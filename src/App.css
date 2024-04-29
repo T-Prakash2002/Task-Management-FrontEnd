@@ -1,0 +1,7 @@
+.loginpage{
+    min-width: 500px;
+    max-width: 500px;
+}
+.err{
+    color: red;
+}
