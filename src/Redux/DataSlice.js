@@ -1,11 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { mentors, students } from "../constants";
-
 
 
 const initialState = {
-        IsLogIn:false,
-        // data:[{...mentors},{...students}]
+        IsLogIn:localStorage.getItem("login") || "",
+        
         data: 22,
 }
 
@@ -14,10 +12,12 @@ const LoginSlice = createSlice({
         initialState,
         reducers: {
                 SignIn: (state,actions) => {
-                    state.IsLogIn=true
+                    state.IsLogIn=true;
+                    localStorage.setItem("login", actions.payload);
                 },
                 SignOut: (state,actions) => {
                     state.IsLogIn=false
+                    localStorage.setItem("login", "");
                 }
         }
 

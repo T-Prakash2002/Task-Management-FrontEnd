@@ -38,9 +38,9 @@ export default function Login() {
               )
 
               if (apiResponse.data && apiResponse.data != "Login Failed") {
-                localStorage.setItem("login", apiResponse.data);
+                
                 console.log("Login Successfully!!!");
-                dispatch(SignIn());
+                dispatch(SignIn(apiResponse.data));
                 //navigate("/register")
               } else {
                 

@@ -2,14 +2,14 @@ import React from "react";
 import '../Style/SideBar.css'
 import { Outlet,Link } from "react-router-dom";
 import { useSelector,useDispatch } from 'react-redux';
-import { SignIn,SignOut } from "../Redux/DataSlice";
+import { SignOut } from "../Redux/DataSlice";
 import Login from "./Login";
 
 const SideBar = ({IsLogIn}) => {
     
     
     const dispatch = useDispatch()
-    
+
   return (
     <div className="container-fluid m-1">
       <div className="row">
