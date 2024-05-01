@@ -1,0 +1,6 @@
+.nav-pills li a:hover{
+    background-color: blueviolet;
+}
+.nav-pills li a:active{
+    background-color: blueviolet;
+}

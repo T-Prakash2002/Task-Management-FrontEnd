@@ -9,7 +9,7 @@ import axios from "axios";
 
 export default function Registration() {
   return (
-    <div className="container-fluid loginpage">
+    <div className="loginpage">
       <div className="card w-75">
         <div className="card-body">
           <Formik

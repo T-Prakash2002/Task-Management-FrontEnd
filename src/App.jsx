@@ -1,19 +1,16 @@
-import Login from "./Components/Login";
-import Registration from "./Components/Registration";
-import "./App.css";
+import SideBar from "./Components/Sidebar";
 import { useState } from "react";
-
+import "./App.css";
 
 
 function App() {
-    
-  const [openType,setOpenType]=useState('login')
+  const [IsLogIn, setIsLogIn] = useState(false);
 
   return (
     <>
-      {
-        (openType === 'login'?<Login />:<Registration />)
-      }
+      
+    <SideBar IsLogIn={IsLogIn} setIsLogIn={setIsLogIn} />
+    
     </>
   );
 }
