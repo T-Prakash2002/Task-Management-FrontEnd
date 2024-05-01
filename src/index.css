@@ -6,6 +6,7 @@
     box-shadow:0 0 4px rgb(121, 207, 180);
     min-height: 90vh;
     overflow: hidden;
+    height: 100%;
 }
 
 .navbar{

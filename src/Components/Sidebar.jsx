@@ -1,13 +1,19 @@
 import React from "react";
 import '../Style/SideBar.css'
-import { Outlet } from "react-router-dom";
+import { Outlet,Link } from "react-router-dom";
+import { useSelector,useDispatch } from 'react-redux';
+import { SignIn,SignOut } from "../Redux/DataSlice";
+import Login from "./Login";
 
-
-const SideBar = ({IsLogIn,setIsLogIn}) => {
+const SideBar = ({IsLogIn}) => {
+    
+    
+    const dispatch = useDispatch()
+    
   return (
-    <div className="container-fluid m-1 ">
+    <div className="container-fluid m-1">
       <div className="row">
-        <div className="bg-dark col-auto min-vh-100 d-flex justify-content-between flex-column rounded-3">
+        <div className="bg-dark sidebar col-3 min-vh-100 d-flex justify-content-between flex-column rounded-3">
           <div className="mt-2">
             <a className="text-decoration-none ms-3 d-sm-inline text-white d-flex align-items-center">
               <i className="fs-3 bi bi-list gap-2 "></i>
@@ -77,7 +83,7 @@ const SideBar = ({IsLogIn,setIsLogIn}) => {
               </li>
               <li>
                 <a className="dropdown-item" onClick={()=>{
-                    setIsLogIn(false)
+                    dispatch(SignOut())
                 }}>
                   Sign out
                 </a>
@@ -86,19 +92,18 @@ const SideBar = ({IsLogIn,setIsLogIn}) => {
           </div>):(
             <div className="d-flex mb-4 justify-content-center">
                 <i className="bi bi-person-fill-add me-3 d-sm-none text-white fs-2"></i>
-                <button className="btn btn-light d-none d-sm-inline w-75" type="button" onClick={()=>{setIsLogIn(true)}}>
+                <Link to="/login" className="btn btn-light d-none d-sm-inline w-75">
                     <span className="fw-bold">SIGN IN</span>
-                </button>
+                </Link>
 
             </div>
           )
           }
         </div>
-        <div className="col">
+        <div className="col-9">
             <Outlet />
         </div>
       </div>
-      
     </div>
   );
 };

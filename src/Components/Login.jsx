@@ -2,10 +2,17 @@ import { Loginvalidateform } from "../Validatation/validateform";
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import { apiuri } from "../constants";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useSelector,useDispatch } from 'react-redux';
+import { SignIn } from "../Redux/DataSlice";
+
+
 
 export default function Login() {
 
+    const navigate = useNavigate();
+    const dispatch=useDispatch();
 
   return (
     <div className="loginpage">
@@ -14,7 +21,7 @@ export default function Login() {
           <Formik
             initialValues={{ username: "", password: "", role: "" }}
             validationSchema={Loginvalidateform}
-            onSubmit={async (values) => {
+            onSubmit={async (values, { resetForm }) => {
               //                 const role=(values.role=="mentor")?mentors:students;
               //
               //                 const auth=role.some(user=>user.username===values.username && user.password===values.password);
@@ -28,14 +35,18 @@ export default function Login() {
               console.log("login");
               const apiResponse = await axios.get(
                 `${apiuri}/login/${values.username}/${values.password}/${values.role}`
-              );
+              )
 
               if (apiResponse.data && apiResponse.data != "Login Failed") {
                 localStorage.setItem("login", apiResponse.data);
                 console.log("Login Successfully!!!");
-              }else{
+                dispatch(SignIn());
+                //navigate("/register")
+              } else {
+                
                 alert("User Not Found! Try Again");
               }
+              resetForm()
             }}
           >
             <Form>

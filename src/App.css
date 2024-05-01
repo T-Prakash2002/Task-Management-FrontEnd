@@ -1,9 +1,36 @@
 
-.loginpage{
+.loginpage,.registrationpage{
     min-width: 500px;
-    max-width: 500px;
-    
+    max-width: 600px;
+    display: flex;
+    justify-content:center;
+    position: relative;
+    top: 10%;
+}
+.registrationpage{
+    top:0%;
 }
 .err{
-    color: red;
+    color: #f35050;
+}
+
+@media(max-width:576px) {
+    .sidebar{
+        min-width:50px;
+    }
+    .loginpage{
+        min-width:400px;
+        display: flex;
+        justify-content:flex-start;
+        align-items: center;
+        position: relative;
+        top: 25%;
+    }
+    .registrationpage{
+        min-width: 300px;
+        justify-content:flex-start;
+        align-items: center;
+         position: relative;
+        top: 0%;
+    }
 }

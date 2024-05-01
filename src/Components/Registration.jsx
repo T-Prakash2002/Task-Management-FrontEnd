@@ -9,13 +9,13 @@ import axios from "axios";
 
 export default function Registration() {
   return (
-    <div className="loginpage">
+    <div className="registrationpage">
       <div className="card w-75">
         <div className="card-body">
           <Formik
             initialValues={{ username: "", password: "",Cpassword:'',email:'', age:'',role: "" }}
             validationSchema={Registervalidateform}
-            onSubmit={async (values) => {
+            onSubmit={async (values, { resetForm }) => {
 
                 console.log('register');
 
@@ -32,7 +32,7 @@ export default function Registration() {
                     ...userDetails,
                 })
                 console.log(apiRes.data);
-                
+                resetForm()
             }}
           >
             <Form>
