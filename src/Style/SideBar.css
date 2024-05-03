@@ -1,6 +1,21 @@
+.sidebar{
+    background-color: rgb(13, 100, 129);
+    color: black;
+    max-width: 200px;
+    border: 0.04cqi solid rgb(49, 36, 36);
+    box-shadow: 0 0 10px rgb(238, 235, 241);
+}
+
 .nav-pills li a:hover{
-    background-color: blueviolet;
+    background-color: rgb(43, 226, 156);
 }
 .nav-pills li a:active{
-    background-color: blueviolet;
+    background-color: rgb(176, 207, 203);
+}
+
+.profile-img{
+    border:0.3cap solid;
+    border-radius: 50px;
+    background-color: aliceblue;
+    color: rgb(50, 182, 160);
 }

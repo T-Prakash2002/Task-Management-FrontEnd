@@ -4,15 +4,12 @@ import { apiuri } from "../constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useSelector,useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 import { SignIn } from "../Redux/DataSlice";
 
-
-
 export default function Login() {
-
-    const navigate = useNavigate();
-    const dispatch=useDispatch();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   return (
     <div className="loginpage">
@@ -35,18 +32,16 @@ export default function Login() {
               console.log("login");
               const apiResponse = await axios.get(
                 `${apiuri}/login/${values.username}/${values.password}/${values.role}`
-              )
+              );
 
               if (apiResponse.data && apiResponse.data != "Login Failed") {
-                
                 console.log("Login Successfully!!!");
                 dispatch(SignIn(apiResponse.data));
-                //navigate("/register")
+                navigate("/dashboard");
               } else {
-                
                 alert("User Not Found! Try Again");
               }
-              resetForm()
+              resetForm();
             }}
           >
             <Form>
@@ -77,14 +72,14 @@ export default function Login() {
               </div>
 
               <div className="mb-3">
-                <label className="col-12 col-sm-6">
-                  <Field type="radio" name="role" value="mentor" />
-                  Mentor
-                </label>
-                <label className="col-12 col-sm-6">
-                  <Field type="radio" name="role" value="student" />
-                  Student
-                </label>
+                <label>Role:</label>
+                <br />
+                <Field as="select" name="role">
+                  <option value="Select_user">Select User</option>
+                  <option value="Admin">Admin</option>
+                  <option value="Member">Member</option>
+                  
+                </Field>
 
                 <ErrorMessage
                   className="err small"
@@ -94,9 +89,7 @@ export default function Login() {
               </div>
 
               <div className="mb-3">
-                {/* <button type="submit" className="btn btn-dark form-control">
-                  Submit
-                </button> */}
+                
                 <button type="submit" className="btn btn-dark form-control">
                   Submit
                 </button>

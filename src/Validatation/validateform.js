@@ -1,24 +1,38 @@
 import * as Yup from 'yup';
 
-export const Registervalidateform=Yup.object().shape({
-    username:Yup.string().min(1).required('User name is required'),
+const phoneRegExp = /^\+?\d{8,15}$/;
 
-    password:Yup.string().min(1,"Password must be at least 4 characters").required("Password is required"),
+
+export const Registervalidateform=Yup.object().shape({
+    username:Yup.string().min(2).required('User name is required'),
+
+    password:Yup.string().min(4,"Password must be at least 4 characters").max(12,"Password must be atmost 12 characters").required("Password is required"),
 
     Cpassword:Yup.string().oneOf([Yup.ref('password'),null],'Passwords must mach').required('Confirm Password is required'),
 
-    role: Yup.string().required('Role is required'),
+    role: Yup.string().required('Role is required').notOneOf(['Select_user'],"Select Valid Option"),
 
-    age: Yup.number().positive('Age must be a positive number').integer('Age must be an integer').required('Age is required'),
+    age: Yup.string().matches(/^[0-9]+$/, 'Age must contain only numbers').required('Age is required'),
 
-    email:Yup.string().email('Invalid email').required('Email is required')
+    email:Yup.string().email('Invalid email').required('Email is required'),
+
+    phonenumber:Yup.string().matches(phoneRegExp, 'Phone number is not valid').required(),
+
+    dataofjoin:Yup.date().required('Date is required').max(new Date(), 'Date cannot be in the future'),
+
+    address:Yup.string().min(5, 'Address must be at least 5 characters').max(100, 'Textarea must be at most 100 characters').required('Address is required'),
+
+    city:Yup.string().min(3,'City must be at least 3 character').max(20,'City must be atmost 20 character').required("city is Required"),
+
+    zipCode:Yup.string().required().matches(/^[0-9]+$/, 'Zip Code must contain only numbers'),
+
 })
 
 export const Loginvalidateform=Yup.object().shape({
-    username:Yup.string().min(1).required('User name is required'),
+    username:Yup.string().min(2).required('User name is required'),
 
-    password:Yup.string().min(1,"Password must be at least 1 characters").required("Password is required"),
+    password:Yup.string().min(4,"Password must be at least 1 characters").max(12,"Password must be atmost 12 characters").required("Password is required"),
 
-    role: Yup.string().required('Role is required'),
+    role: Yup.string().required('Role is required').notOneOf(['NotValue'],"Select Valid Option"),
 
 })

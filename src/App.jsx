@@ -8,14 +8,11 @@ function App() {
   // const [IsLogIn, setIsLogIn] = useState(false);
   
   const IsLogIn=useSelector(state=>state.LoginDetails.IsLogIn)
-
-  console.log(IsLogIn);
-
+  // const user=useSelector(state=>state.LoginDetails.LogInUser)
+  
   return (
     <>
-      
       <SideBar IsLogIn={IsLogIn}  />
-    
     </>
   );
 }
