@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { SignIn } from "../Redux/DataSlice";
+import { SignIn , GetMemberList} from "../Redux/DataSlice";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -37,6 +37,16 @@ export default function Login() {
               if (apiResponse.data && apiResponse.data != "Login Failed") {
                 console.log("Login Successfully!!!");
                 dispatch(SignIn(apiResponse.data));
+
+                if(values.role==='Admin'){
+                      const dbMemberResponse= await axios.get(`${apiuri}/getMemberList`);
+
+                      dispatch(GetMemberList({data:dbMemberResponse.data}))
+
+                }
+
+
+
                 navigate("/dashboard");
               } else {
                 alert("User Not Found! Try Again");
@@ -74,11 +84,10 @@ export default function Login() {
               <div className="mb-3">
                 <label>Role:</label>
                 <br />
-                <Field as="select" name="role">
+                <Field as="select" name="role" className="form-control-sm">
                   <option value="Select_user">Select User</option>
                   <option value="Admin">Admin</option>
                   <option value="Member">Member</option>
-                  
                 </Field>
 
                 <ErrorMessage
@@ -89,7 +98,6 @@ export default function Login() {
               </div>
 
               <div className="mb-3">
-                
                 <button type="submit" className="btn btn-dark form-control">
                   Submit
                 </button>

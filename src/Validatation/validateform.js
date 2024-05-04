@@ -36,3 +36,17 @@ export const Loginvalidateform=Yup.object().shape({
     role: Yup.string().required('Role is required').notOneOf(['NotValue'],"Select Valid Option"),
 
 })
+
+export const CreateTaskValidation=Yup.object().shape({
+    Task_Name:Yup.string().required(),
+
+    description:Yup.string().required(),
+
+    TaskDeadLineDate:Yup.date().required('Date is required').min(new Date(), 'Date cannot be in the past'),
+
+
+
+
+
+
+})

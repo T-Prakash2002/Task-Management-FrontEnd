@@ -105,7 +105,7 @@ const SideBar = ({ IsLogIn }) => {
           )}
         </div>
         <div className="col-9">
-          <div className="container border min-vh-100 min-vw-100 ">
+          <div className="container-fluid border">
             <Outlet />
           </div>
         </div>

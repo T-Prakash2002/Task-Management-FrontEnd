@@ -2,6 +2,7 @@ import SideBar from "./Components/Sidebar";
 import { useState } from "react";
 import "./App.css";
 import { useSelector,useDispatch } from 'react-redux'
+import Sample from "./Components/Sample";
 
 
 function App() {
@@ -13,6 +14,8 @@ function App() {
   return (
     <>
       <SideBar IsLogIn={IsLogIn}  />
+
+      {/* <Sample IsLogIn={IsLogIn}/> */}
     </>
   );
 }

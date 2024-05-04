@@ -1,7 +1,8 @@
 .sidebar{
     background-color: rgb(13, 100, 129);
     color: black;
-    max-width: 200px;
+    min-width: 170px;
+    max-width: 50px;
     border: 0.04cqi solid rgb(49, 36, 36);
     box-shadow: 0 0 10px rgb(238, 235, 241);
 }

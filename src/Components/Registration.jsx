@@ -31,6 +31,7 @@ export default function Registration() {
                 password: values.password,
                 email: values.email,
                 age: values.age,
+                role:values.role,
                 phonenumber: values.phonenumber,
                 dataofjoin: values.dataofjoin,
                 address: values.address,
@@ -110,7 +111,7 @@ export default function Registration() {
               <div className="mb-3">
                 <label>Role:</label>
                 <br />
-                <Field as="select" name="role">
+                <Field as="select" name="role"  className="form-control-sm">
                   <option value="Select_user">Select an option</option>
                   <option value="Admin">Admin</option>
                   <option value="Member">Member</option>
