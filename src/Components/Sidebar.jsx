@@ -3,11 +3,18 @@ import "../Style/SideBar.css";
 import { Outlet, Link, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { SignOut } from "../Redux/DataSlice";
+import { useNavigate } from "react-router-dom";
+import { encryptStorage1 } from "../Encrypt/Encrpt";
+
+
 import Login from "./Login";
 
 const SideBar = ({ IsLogIn }) => {
-  const user = localStorage.getItem("login");
+  const user = useSelector((state) => state.LoginDetails.LogInUser)||'';
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const val1=encryptStorage1.getItem('user');
 
   return (
     <div className="container-fluid">
@@ -61,9 +68,9 @@ const SideBar = ({ IsLogIn }) => {
                 aria-expanded="false"
               >
                 <span className="profile-img me-3 px-2 ">
-                  {user.charAt(0).toUpperCase()}
+                  {user.username.charAt(0).toUpperCase()}
                 </span>
-                <strong className="d-none d-sm-inline">{user}</strong>
+                <strong className="d-none d-sm-inline">{user.username}</strong>
               </a>
               <ul
                 className="dropdown-menu text-small shadow"
@@ -82,6 +89,7 @@ const SideBar = ({ IsLogIn }) => {
                     className="dropdown-item"
                     onClick={() => {
                       dispatch(SignOut());
+                      navigate("/");
                     }}
                   >
                     Sign out

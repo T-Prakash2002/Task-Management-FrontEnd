@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { apiuri } from "../constants";
+import { encryptStorage1, encryptStorage2 } from "../Encrypt/Encrpt";
 
 const initialState = {
-        IsLogIn: localStorage.getItem("login") || "",
-        LogInUser:{},
-        MemberList:{}
+
+        LogInUser:encryptStorage1.getItem('user')||"",
+        MemberList:encryptStorage2.getItem('MemberList')||"",
 }
 
 const LoginSlice = createSlice({
@@ -15,8 +16,8 @@ const LoginSlice = createSlice({
                 SignIn: (state, actions) => {
 
                         state.IsLogIn = true;
-                        
-                        localStorage.setItem("login", actions.payload.username);
+
+                        encryptStorage1.setItem("user",actions.payload)
 
                         state.LogInUser = actions.payload;
 
@@ -25,22 +26,22 @@ const LoginSlice = createSlice({
                 SignOut: (state) => {
 
                         state.IsLogIn = false
-                        localStorage.setItem("login", "");
+                        encryptStorage1.removeItem('user')
+                        encryptStorage2.removeItem('MemberList')
                         state.LogInUser = {};
 
                 },
-                GetMemberList:(state,actions)=>{
+                GetMemberList: (state,actions) => {
 
-                        state.MemberList=  actions.payload.data
-                        localStorage.setItem('MemberList',actions.payload.data)
-                        
+                        state.MemberList=actions.payload.data
+
+                        encryptStorage2.setItem('MemberList',actions.payload.data);
                 }
-                
         }
 
 })
 
-// Action creators are generated for each case reducer function
-export const { SignIn, SignOut , GetMemberList } = LoginSlice.actions
+
+export const { SignIn, SignOut, GetMemberList } = LoginSlice.actions
 
 export default LoginSlice.reducer;

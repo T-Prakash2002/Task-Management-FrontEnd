@@ -1,21 +1,40 @@
 import SideBar from "./Components/Sidebar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { useSelector,useDispatch } from 'react-redux'
-import Sample from "./Components/Sample";
+import axios, { AxiosError } from "axios";
+import { apiuri } from "./constants";
+import { GetMemberList } from "./Redux/DataSlice";
+
+
 
 
 function App() {
-  // const [IsLogIn, setIsLogIn] = useState(false);
   
-  const IsLogIn=useSelector(state=>state.LoginDetails.IsLogIn)
-  // const user=useSelector(state=>state.LoginDetails.LogInUser)
+  const user=useSelector(state=>state.LoginDetails.LogInUser);
+  const dispatch=useDispatch()
+
+ useEffect(() => {
+    if (user.role === "Admin") {
+
+      axios.get(`${apiuri}/getMemberList`)
+      .then(({data})=>{
+        
+        dispatch(GetMemberList({ data: data }));
+
+      }).catch((err)=>{
+         if(err.toJSON().message==="Network Error"){
+          alert('Connection is Poor!!,Chek your Connection');
+         }
+      })
+    }
+  },[]);
   
   return (
     <>
-      <SideBar IsLogIn={IsLogIn}  />
-
-      {/* <Sample IsLogIn={IsLogIn}/> */}
+    
+      <SideBar IsLogIn={user}  />
+      
     </>
   );
 }

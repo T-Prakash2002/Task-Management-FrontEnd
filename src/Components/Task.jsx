@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import { CreateTaskValidation } from "../Validatation/validateform";
 import { apiuri } from "../constants";
@@ -7,16 +7,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { GetMemberList } from "../Redux/DataSlice";
 
 const Task = () => {
-  const user = useSelector((state) => state.LoginDetails.LogInUser);
+  const MemberList = useSelector((state) => state.LoginDetails.MemberList);
+  const user=useSelector(state=>state.LoginDetails.LogInUser);
 
-  const MemberLi = useSelector((state) => state.LoginDetails.MemberList);
+  const [selectMembers, setSelectMembers] = useState([]);
 
-  const MemberList = MemberLi ? MemberLi : localStorage.getItem("MemberList");
-
-  const dispatch = useDispatch();
-
-  console.log(localStorage.getItem("MemberList"));
-  
+  console.log(selectMembers);
   return (
     <div className="container-fluid ">
       <div className="row">
@@ -54,36 +50,37 @@ const Task = () => {
             <div className="card card-body">
               <Formik
                 initialValues={{
+                  
                   Task_Name: "",
                   description: "",
                   TaskDeadLineDate: "",
-                  assigned_member: "",
+                  priority: "",
+                  assigned_member: selectMembers,
                 }}
                 validationSchema={CreateTaskValidation}
                 onSubmit={async (values, { resetForm }) => {
                   console.log("register");
 
                   const TaskDetails = {
+                    assigner:user.username,
                     Task_Name: values.Task_Name,
                     description: values.description,
                     TaskDeadLineDate: values.TaskDeadLineDate,
-                    assigned_member: values.assigned_member,
-                    dataofjoin: values.dataofjoin,
-                    address: values.address,
-                    city: values.city,
-                    zipCode: values.zipCode,
+                    priority: values.priority,
+                    assigned_member: selectMembers,
                   };
 
-                  //console.log(`${apiuri}/${values.role}Registration`);
+                    console.log(TaskDetails);
+                //   console.log(`${apiuri}/Registration`);
 
-                  //   const apiRes = await axios.post(
-                  //     `${apiuri}/${values.role}Registration`,
-                  //     {
-                  //       ...userDetails,
-                  //     }
-                  //   );
-                  //   console.log(apiRes.data);
-                  //   resetForm();
+                    const apiRes = await axios.post(
+                      `${apiuri}/createTask`,
+                      {
+                        ...TaskDetails,
+                      }
+                    );
+                    console.log(apiRes.data);
+                  resetForm();
                 }}
               >
                 <Form className="row">
@@ -131,26 +128,20 @@ const Task = () => {
 
                   <div className="col-6 mb-3 ">
                     <label htmlFor="status" className="">
-                      Status
+                      Priority
                     </label>
                     <br />
 
-                    <Field
-                      as="select"
-                      name="status"
-                      className="btn btn-secondary dropdown-toggle"
-                      data-bs-toggle="dropdown"
-                      aria-expanded="false"
-                    >
-                      <option value="new">New</option>
-                      <option value="Progress">In Progress</option>
-                      <option value="Completed">Completed</option>
-                      <option value="Pending">Pending</option>
+                    <Field name="priority" className="btn btn-secondary dropdown-toggle" as="select">
+                    <option value="Select_Priority">Select an option</option>
+                      <option value="Normal">Normal</option>
+                      <option value="Important">Important</option>
+                      <option value="Priority">Priority</option>
                     </Field>
 
                     <ErrorMessage
                       className="err small"
-                      name="assigned_member"
+                      name="priority"
                       component="div"
                     />
                   </div>
@@ -177,7 +168,7 @@ const Task = () => {
                       aria-labelledby="exampleModalLabel"
                       aria-hidden="true"
                     >
-                      <div className="modal-dialog modal-dialog-scrollable modal-sm">
+                      <div className="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm">
                         <div className="modal-content">
                           <div className="modal-header">
                             <h5
@@ -194,43 +185,50 @@ const Task = () => {
                             ></button>
                           </div>
                           <div className="modal-body">
-                            <form
-                              onSubmit={(e) => {
-                                e.preventDefault();
-                                console.log(e.target.value);
-                              }}
+                            <ul typeof="none">
+                                {MemberList.map((member, index) => {
+                              return (
+                                <div className="form-check" key={index}>
+                                  <input
+                                    className="form-check-input"
+                                    type="checkbox"
+                                    name="checkMember"
+                                    value={member.username}
+                                    id={member.username}
+                                    onChange={(e) => {
+                                      if (e.target.checked) {
+                                        setSelectMembers([
+                                          ...selectMembers,
+                                          e.target.value,
+                                        ]);
+                                      } else {
+                                        setSelectMembers(
+                                          selectMembers.filter(
+                                            (item) => item != e.target.value
+                                          )
+                                        );
+                                      }
+                                    }}
+                                  />
+                                  <label
+                                    className="form-check-label"
+                                    htmlFor={member.username}
+                                  >
+                                    {member.username}
+                                  </label>
+                                  <hr />
+                                </div>
+                              );
+                            })}
+
+                            </ul>
+                            <button
+                              type="button"
+                              className="btn btn-primary btn-sm"
+                              data-bs-dismiss="modal"
                             >
-                              {MemberList.map((member, index) => {
-                                return (
-                                  <>
-                                    <div className="form-check" key={index}>
-                                      <input
-                                        className="form-check-input"
-                                        type="checkbox"
-                                        value=""
-                                        id={member.username}
-                                      />
-                                      <label
-                                        className="form-check-label"
-                                        for={member.username}
-                                      >
-                                        {member.username}
-                                      </label>
-                                    </div>
-                                    <hr />
-                                  </>
-                                );
-                              })}
-                              
-                                <button
-                                  type="submit"
-                                  className="btn btn-primary btn-sm"
-                                  data-bs-dismiss="modal"
-                                >
-                                  Submit
-                                </button>
-                              
-                            </form>
+                              Submit
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -254,6 +252,12 @@ const Task = () => {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="row">
+        
+        
+
       </div>
     </div>
   );

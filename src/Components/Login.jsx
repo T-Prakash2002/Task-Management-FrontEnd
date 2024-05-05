@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { SignIn , GetMemberList} from "../Redux/DataSlice";
+import { SignIn, GetMemberList } from "../Redux/DataSlice";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -30,22 +30,19 @@ export default function Login() {
               //                 }
 
               console.log("login");
-              const apiResponse = await axios.get(
-                `${apiuri}/login/${values.username}/${values.password}/${values.role}`
-              );
+              const apiResponse = await axios
+                .get(
+                  `${apiuri}/login/${values.username}/${values.password}/${values.role}`
+                )
+                .catch((err) => {
+                  if (err.toJSON().message === "Network Error") {
+                    alert("Connection is Poor!!,Chek your Connection");
+                  }
+                });
 
               if (apiResponse.data && apiResponse.data != "Login Failed") {
                 console.log("Login Successfully!!!");
                 dispatch(SignIn(apiResponse.data));
-
-                if(values.role==='Admin'){
-                      const dbMemberResponse= await axios.get(`${apiuri}/getMemberList`);
-
-                      dispatch(GetMemberList({data:dbMemberResponse.data}))
-
-                }
-
-
 
                 navigate("/dashboard");
               } else {
