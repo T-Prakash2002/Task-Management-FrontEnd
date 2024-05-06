@@ -1,7 +1,7 @@
 
 .loginpage,.registrationpage{
     min-width: 500px;
-    max-width: 600px;
+    max-width: 700px;
     display: flex;
     justify-content:center;
     
@@ -12,24 +12,3 @@
 .err{
     color: #f35050;
 }
-
-/* @media(max-width:576px) {
-    .sidebar{
-        min-width:50px;
-    }
-    .loginpage{
-        min-width:400px;
-        display: flex;
-        justify-content:flex-start;
-        align-items: center;
-        position: relative;
-        top: 25%;
-    }
-    .registrationpage{
-        min-width: 300px;
-        justify-content:flex-start;
-        align-items: center;
-         position: relative;
-        top: 0%;
-    }
-} */

@@ -6,116 +6,112 @@ import { SignOut } from "../Redux/DataSlice";
 import { useNavigate } from "react-router-dom";
 import { encryptStorage1 } from "../Encrypt/Encrpt";
 
-
 import Login from "./Login";
 
 const SideBar = ({ IsLogIn }) => {
-  const user = useSelector((state) => state.LoginDetails.LogInUser)||'';
+  const user = useSelector((state) => state.LoginDetails.LogInUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const val1=encryptStorage1.getItem('user');
+  const val1 = encryptStorage1.getItem("user");
 
   return (
     <div className="container-fluid">
-      <div className="row">
-        <div className="col-3 min-vh-100 sidebar d-flex justify-content-between flex-column">
-          <div className="mt-2">
-            <a className="text-decoration-none ms-3 d-sm-inline text-white d-flex align-items-center">
-              <i className="fs-3 bi bi-list gap-2 "></i>
-              <span className="d-none d-sm-inline">Task Management</span>
-            </a>
+      <nav className="navbar navbar-expand-md navbar-dark bg-dark">
+        <div className="container-fluid">
+          <a className="navbar-brand" href="#">
+            <i className="text-white text-muted">Task Management</i>
+          </a>
+          <button
+            className="navbar-toggler btn"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="bi bi-three-dots fs-6"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
 
-            <hr className="text-white" />
+            {IsLogIn?(
+              <ul className="navbar-nav me-auto mb-lg-0">
+              <li className="nav-item">
+                <NavLink to={"/dashboard"} className="nav-link text-white">
+                  <i className="bi bi-speedometer fs-5"></i>
+                  <span className=" mx-2">DashBoard</span>
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink to={"/task"} className="nav-link text-white ">
+                  <i className="bi bi-card-checklist fs-5"></i>
+                  <span className="mx-2">Task</span>
+                </NavLink>
+              </li>
+            </ul>
+            ):''
+            }
+
             {IsLogIn ? (
-              <ul className="nav nav-pills flex-column mt-4">
-                <li className="nav-item ">
-                  <NavLink
-                    to={"/dashboard"}
-                    className="nav-link text-white "
-                    aria-current="page"
-                  >
-                    <i className="bi bi-speedometer fs-5"></i>
-                    <span className="ms-2 d-none d-sm-inline">DashBoard</span>
-                  </NavLink>
-                </li>
-                {/* <li className="nav-item ">
-                  <a href="#" className="nav-link text-white ">
-                    <i className="bi bi-house-door-fill fs-5"></i>
-                    <span className="ms-3 d-none d-sm-inline">Home</span>
-                  </a>
-                </li> */}
-                <li className="nav-item ">
-                  <NavLink to={"/task"} className="nav-link text-white ">
-                    <i className="bi bi-card-checklist fs-5"></i>
-                    <span className="ms-3 d-none d-sm-inline">Task</span>
-                  </NavLink>
-                </li>
-              </ul>
+              <div className="dropdown ms-auto">
+                <a
+                  href="#"
+                  className="d-flex align-items-center link-dark text-decoration-none dropdown-toggle text-white"
+                  id="dropdownUser2"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <span className="profile-img me-3 px-2 ">
+                    {user.username.charAt(0).toUpperCase()}
+                  </span>
+                  <strong className=" d-sm-inline">{user.username}</strong>
+                </a>
+                <ul
+                  className="dropdown-menu text-small shadow"
+                  aria-labelledby="dropdownUser2"
+                >
+                  <li>
+                    <Link className="dropdown-item" to="/profile">
+                      Profile
+                    </Link>
+                  </li>
+                  <li>
+                    <hr className="dropdown-divider" />
+                  </li>
+                  <li>
+                    <a
+                      className="dropdown-item"
+                      onClick={() => {
+                        dispatch(SignOut());
+                        navigate("/");
+                      }}
+                    >
+                      Sign out
+                    </a>
+                  </li>
+                </ul>
+              </div>
             ) : (
-              ""
+              <div className="d-flex justify-content-center">
+                <Link to="/login" className=" d-sm-none"></Link>
+
+                <Link to="/login">
+                  <span className="fw-bold btn btn-light">
+                    <i className="bi bi-person-fill-add me-3 text-dark mx-2"></i>
+                    SIGN IN
+                  </span>
+                </Link>
+              </div>
             )}
           </div>
-
-          {IsLogIn ? (
-            <div className="dropdown mb-4">
-              <hr className="text-white" />
-              <a
-                href="#"
-                className="d-flex align-items-center link-dark text-decoration-none dropdown-toggle text-white"
-                id="dropdownUser2"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <span className="profile-img me-3 px-2 ">
-                  {user.username.charAt(0).toUpperCase()}
-                </span>
-                <strong className="d-none d-sm-inline">{user.username}</strong>
-              </a>
-              <ul
-                className="dropdown-menu text-small shadow"
-                aria-labelledby="dropdownUser2"
-              >
-                <li>
-                  <Link className="dropdown-item" to="/profile">
-                    Profile
-                  </Link>
-                </li>
-                <li>
-                  <hr className="dropdown-divider" />
-                </li>
-                <li>
-                  <a
-                    className="dropdown-item"
-                    onClick={() => {
-                      dispatch(SignOut());
-                      navigate("/");
-                    }}
-                  >
-                    Sign out
-                  </a>
-                </li>
-              </ul>
-            </div>
-          ) : (
-            <div className="d-flex mb-4 justify-content-center">
-              {/* <Link to="/login" className=" d-sm-none">
-                
-              </Link> */}
-
-              <Link to="/login" className="w-75">
-                <i className="bi bi-person-fill-add me-3 d-sm-none text-white fs-2"></i>
-                <span className="fw-bold d-none d-sm-inline btn btn-light">
-                  SIGN IN
-                </span>
-              </Link>
-            </div>
-          )}
         </div>
-        <div className="col-9">
-          <div className="container-fluid border">
-            <Outlet />
-          </div>
+      </nav>
+
+      {/* Outlet */}
+      <div className="row">
+        <div className="container">
+          <Outlet />
         </div>
       </div>
     </div>

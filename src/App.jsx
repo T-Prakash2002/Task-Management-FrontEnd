@@ -11,37 +11,13 @@ import { GetMemberList,GetTaskList } from "./Redux/DataSlice";
 
 function App() {
   
-  const user=useSelector(state=>state.LoginDetails.LogInUser);
-  const dispatch=useDispatch();
+  const IsLogIn=useSelector(state=>state.LoginDetails.IsLogIn);
 
- useEffect(() => {
-    if (user.role === "Admin") {
 
-      axios.get(`${apiuri}/getMemberList`)
-      .then(({data})=>{
-        
-        dispatch(GetMemberList({ data: data }));
-
-      }).catch((err)=>{
-         if(err.toJSON().message==="Network Error"){
-          alert('Connection is Poor!!,Chek your Connection');
-         }
-
-      })
-
-      axios.get(`${apiuri}/getTaskList`)
-      .then(({data})=>{
-        dispatch(GetTaskList({data:data}))
-      })
-
-      
-    }
-  },[]);
-  
   return (
     <>
     
-      <SideBar IsLogIn={user}  />
+      <SideBar IsLogIn={IsLogIn}  />
       
     </>
   );

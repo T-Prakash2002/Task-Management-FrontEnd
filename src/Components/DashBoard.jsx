@@ -25,8 +25,6 @@ const DashBoard = () => {
     }  
   },[]);
 
-  console.log(MemberList);
-
   return (
     <>
       {

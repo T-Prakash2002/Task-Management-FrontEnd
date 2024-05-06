@@ -19,15 +19,6 @@ export default function Login() {
             initialValues={{ username: "", password: "", role: "" }}
             validationSchema={Loginvalidateform}
             onSubmit={async (values, { resetForm }) => {
-              //                 const role=(values.role=="mentor")?mentors:students;
-              //
-              //                 const auth=role.some(user=>user.username===values.username && user.password===values.password);
-              //
-              //                 if(auth){
-              //                     localStorage.setItem("login",JSON.stringify(values))
-              //                 }else{
-              //                     alert(`${values.username} is not a ${values.role} list`)
-              //                 }
 
               console.log("login");
               const apiResponse = await axios

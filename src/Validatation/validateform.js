@@ -47,5 +47,4 @@ export const CreateTaskValidation=Yup.object().shape({
     priority: Yup.string().required('Priority status is required').notOneOf(['Select_Priority'],"Select Valid Option")
 
 
-
 })

@@ -5,25 +5,66 @@ import { apiuri } from "../constants";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import Cart from "./Cart";
-
+import { GetMemberList, GetTaskList } from "../Redux/DataSlice";
 
 
 const Task = () => {
-  const MemberList = useSelector((state) => state.LoginDetails.MemberList);
   const user = useSelector((state) => state.LoginDetails.LogInUser);
-    const tasks=useSelector(state=>state.LoginDetails.TaskList);
+  const IsLogIn = useSelector((state) => state.LoginDetails.IsLogIn);
+  const [searchWords, setSearchWords] = useState();
 
-  let [filterOptions,setFilterOptions]=useState("All");
+  const dispatch = useDispatch();
+  const [AllMembers, setAllMembers] = useState([]);
+  const [AllTasks, setAllTasks] = useState([]);
+
+  let [filterOptions, setFilterOptions] = useState("All");
 
   const [selectMembers, setSelectMembers] = useState([]);
+
+  useEffect(() => {
+    if (user.role === "Admin") {
+      axios
+        .get(`${apiuri}/getMemberList`)
+        .then(({ data }) => {
+          setAllMembers(data);
+          dispatch(GetMemberList({ data: data }));
+        })
+        .catch((err) => {
+          if (err.toJSON().message === "Network Error") {
+            alert("Connection is Poor!!,Chek your Connection");
+          }
+        });
+
+      axios.get(`${apiuri}/getTaskList`).then(({ data }) => {
+        setAllTasks(data);
+        dispatch(GetTaskList({ data: data }));
+      });
+    }
+  }, []);
+
+  let TaskList = AllTasks;
+
+  if (searchWords?.length) {
+    TaskList = AllTasks.filter((eachTask) => {
+      if (
+        eachTask.Task_Name.toLowerCase().includes(searchWords.toLowerCase())
+      ) {
+        return true;
+      }
+      return false;
+    });
+  }
+
+  if (filterOptions == "All") {
+    TaskList = TaskList;
+  } else {
+    TaskList = TaskList.filter((task) => task.Priority == filterOptions);
+  }
 
 
   return (
     <div className="container-fluid ">
       <div className="row">
-        <div className="col">
-          <h6>Task Management</h6>
-        </div>
         <div className="col">
           <form className="d-flex" role="search">
             <input
@@ -31,7 +72,9 @@ const Task = () => {
               type="search"
               placeholder="Search"
               aria-label="Search"
-              onChange={(e) => {}}
+              onChange={(e) => {
+                setSearchWords(e.target.value);
+              }}
             />
           </form>
         </div>
@@ -53,15 +96,22 @@ const Task = () => {
           <select
             className="btn btn-outline-secondary dropdown-toggle"
             as="select"
-            onChange={(e)=>{
-                  setFilterOptions(e.target.value);
-                }
-            }
+            onChange={(e) => {
+              setFilterOptions(e.target.value);
+            }}
           >
-            <option className="dropdown-item" value="All">All</option>
-            <option className="dropdown-item" value="Normal">Normal</option>
-            <option className="dropdown-item" value="Important">Important</option>
-            <option className="dropdown-item" value="Priority">Priority</option>
+            <option className="dropdown-item" value="All">
+              All
+            </option>
+            <option className="dropdown-item" value="Normal">
+              Normal
+            </option>
+            <option className="dropdown-item" value="Important">
+              Important
+            </option>
+            <option className="dropdown-item" value="Priority">
+              Priority
+            </option>
           </select>
         </div>
       </div>
@@ -93,13 +143,15 @@ const Task = () => {
                     assigned_member: selectMembers,
                   };
 
-                  console.log(TaskDetails);
                   //   console.log(`${apiuri}/Registration`);
+                  if (IsLogIn) {
+                    const apiRes = await axios.post(`${apiuri}/createTask`, {
+                      ...TaskDetails,
+                    });
+                  } else {
+                    alert("LogIn Is Must");
+                  }
 
-                  const apiRes = await axios.post(`${apiuri}/createTask`, {
-                    ...TaskDetails,
-                  });
-                  console.log(apiRes.data);
                   resetForm();
                 }}
               >
@@ -132,7 +184,7 @@ const Task = () => {
                     />
                   </div>
 
-                  <div className="col-6 mb-3">
+                  <div className="col-12 col-md-6 mb-3">
                     <label htmlFor="TaskDeadLineDate">DeadLine Date</label>
                     <Field
                       type="date"
@@ -146,7 +198,7 @@ const Task = () => {
                     />
                   </div>
 
-                  <div className="col-6 mb-3 ">
+                  <div className="col-12 col-md-6 mb-3 ">
                     <label htmlFor="status" className="">
                       Priority
                     </label>
@@ -210,7 +262,7 @@ const Task = () => {
                           </div>
                           <div className="modal-body">
                             <ul typeof="none">
-                              {MemberList.map((member, index) => {
+                              {AllMembers.map((member, index) => {
                                 return (
                                   <div className="form-check" key={index}>
                                     <input
@@ -277,23 +329,9 @@ const Task = () => {
         </div>
       </div>
       <div className="row">
-        {
-              (filterOptions=="All")?(
-                
-                (tasks.length<1)?(""):(
-                  tasks.map((task)=>{
-                    return <Cart key={task._id} data={task} />
-                  })
-                )
-              ):(
-                
-                tasks.filter(task=>task.Priority==filterOptions).map((task)=>{
-                  return <Cart key={task._id} data={task}/>
-                })
-
-
-              )
-            }
+        {TaskList.map((task) => {
+          return <Cart key={task._id} data={task} />;
+        })}
       </div>
     </div>
   );

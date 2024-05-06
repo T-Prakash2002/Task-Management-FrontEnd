@@ -5,7 +5,8 @@ import { encryptStorage1, encryptStorage2 } from "../Encrypt/Encrpt";
 
 const initialState = {
 
-        LogInUser:encryptStorage1.getItem('user')||"",
+        IsLogIn:sessionStorage.getItem("IsLogIn")||"",
+        LogInUser:encryptStorage1.getItem("user")||"",
         MemberList:encryptStorage1.getItem('MemberList')||"",
         TaskList:encryptStorage1.getItem('TaskList')||"",
 
@@ -18,25 +19,27 @@ const LoginSlice = createSlice({
         reducers: {
                 SignIn: (state, actions) => {
 
-                        state.IsLogIn = true;
-
+                        state.IsLogIn=true
                         encryptStorage1.setItem("user",actions.payload);
-
+                        sessionStorage.setItem("IsLogIn",true)
                         state.LogInUser = actions.payload;
 
                 },
 
                 SignOut: (state) => {
 
-                        state.IsLogIn = false
+                        state.IsLogIn=false
                         encryptStorage1.removeItem('user')
                         encryptStorage1.removeItem('MemberList')
-                        state.LoginUser={}
+                        sessionStorage.setItem("IsLogIn",false)
+                        encryptStorage1.removeItem('TaskList')
+
 
 
                 },
                 GetMemberList: (state,actions) => {
 
+                        
                         encryptStorage1.setItem('MemberList',actions.payload.data);
 
                 },
@@ -44,8 +47,9 @@ const LoginSlice = createSlice({
 
                         encryptStorage1.setItem('TaskList',actions.payload.data)
 
-                }
+                },
 
+                
         }
 
 })
@@ -56,6 +60,7 @@ export const {
         SignOut, 
         GetMemberList ,
         GetTaskList ,
+       
         
         } = LoginSlice.actions
 

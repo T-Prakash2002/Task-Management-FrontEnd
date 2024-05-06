@@ -11,6 +11,7 @@ import { Provider } from 'react-redux'
 import { store } from "./Redux/store.js";
 
 import Navbar from "./Navbar.jsx";
+import EditTask from "./Components/EditTask.jsx";
 
 
 
@@ -30,11 +31,16 @@ const router = createBrowserRouter([
         element:<DashBoard />
       },{
         path:'task',
-        element:<Task />
+        element:<Task />,
+        
       },{
         path:'profile',
         element:<Profile />
-      }
+      },
+      {
+          path:'editTask',
+          element:<EditTask />
+        }
     ]
   },
 ]);
