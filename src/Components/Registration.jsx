@@ -42,7 +42,7 @@ export default function Registration() {
               //console.log(`${apiuri}/${values.role}Registration`);
 
               const apiRes = await axios.post(
-                `${apiuri}/${values.role}Registration`,
+                `${apiuri}/UserRegistration`,
                 {
                   ...userDetails,
                 }

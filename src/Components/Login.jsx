@@ -44,6 +44,10 @@ export default function Login() {
                 console.log("Login Successfully!!!");
                 dispatch(SignIn(apiResponse.data));
 
+                await axios.get(`${apiuri}/getMemberList`).then(({ data }) => {
+                  dispatch(GetMemberList({ data: data }));
+                });
+
                 navigate("/dashboard");
               } else {
                 alert("User Not Found! Try Again");

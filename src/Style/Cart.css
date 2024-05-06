@@ -1,0 +1,45 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+h3 {
+  color: #262626;
+  font-size: 17px;
+  line-height: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+
+.card{
+  display: block;
+  max-width: 350px;
+  background-color: #f2f8f94b;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin: 12px;
+box-shadow: 0 0 13px gainsboro;
+}
+.bi:hover
+{
+  
+  z-index: 1;
+  transform: scale(1.42);
+  transition: .5s;
+}
+
+.bi-trash:hover{
+  color: red;
+}
+
+.bi-info-circle:hover{
+  color: blue;
+}
+.bi-pencil-square:hover{
+  color: rgb(16, 151, 11);
+}

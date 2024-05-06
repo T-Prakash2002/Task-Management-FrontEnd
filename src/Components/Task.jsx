@@ -4,15 +4,20 @@ import { CreateTaskValidation } from "../Validatation/validateform";
 import { apiuri } from "../constants";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { GetMemberList } from "../Redux/DataSlice";
+import Cart from "./Cart";
+
+
 
 const Task = () => {
   const MemberList = useSelector((state) => state.LoginDetails.MemberList);
-  const user=useSelector(state=>state.LoginDetails.LogInUser);
+  const user = useSelector((state) => state.LoginDetails.LogInUser);
+    const tasks=useSelector(state=>state.LoginDetails.TaskList);
+
+  let [filterOptions,setFilterOptions]=useState("All");
 
   const [selectMembers, setSelectMembers] = useState([]);
 
-  console.log(selectMembers);
+
   return (
     <div className="container-fluid ">
       <div className="row">
@@ -31,8 +36,8 @@ const Task = () => {
           </form>
         </div>
       </div>
-      <div className="row">
-        <div className="col">
+      <div className="row my-3">
+        <div className="col-6">
           <button
             type="button"
             data-bs-toggle="collapse"
@@ -43,14 +48,32 @@ const Task = () => {
           >
             <i className="bi bi-patch-plus-fill">Add Task</i>
           </button>
+        </div>
+        <div className="col-6">
+          <select
+            className="btn btn-outline-secondary dropdown-toggle"
+            as="select"
+            onChange={(e)=>{
+                  setFilterOptions(e.target.value);
+                }
+            }
+          >
+            <option className="dropdown-item" value="All">All</option>
+            <option className="dropdown-item" value="Normal">Normal</option>
+            <option className="dropdown-item" value="Important">Important</option>
+            <option className="dropdown-item" value="Priority">Priority</option>
+          </select>
+        </div>
+      </div>
 
-          {/*      Create Task Model     */}
+      {/*      Create Task Model     */}
 
+      <div className="row my-4">
+        <div className="col">
           <div className="collapse" id="collapseExample">
             <div className="card card-body">
               <Formik
                 initialValues={{
-                  
                   Task_Name: "",
                   description: "",
                   TaskDeadLineDate: "",
@@ -62,7 +85,7 @@ const Task = () => {
                   console.log("register");
 
                   const TaskDetails = {
-                    assigner:user.username,
+                    assigner: user.username,
                     Task_Name: values.Task_Name,
                     description: values.description,
                     TaskDeadLineDate: values.TaskDeadLineDate,
@@ -70,16 +93,13 @@ const Task = () => {
                     assigned_member: selectMembers,
                   };
 
-                    console.log(TaskDetails);
-                //   console.log(`${apiuri}/Registration`);
+                  console.log(TaskDetails);
+                  //   console.log(`${apiuri}/Registration`);
 
-                    const apiRes = await axios.post(
-                      `${apiuri}/createTask`,
-                      {
-                        ...TaskDetails,
-                      }
-                    );
-                    console.log(apiRes.data);
+                  const apiRes = await axios.post(`${apiuri}/createTask`, {
+                    ...TaskDetails,
+                  });
+                  console.log(apiRes.data);
                   resetForm();
                 }}
               >
@@ -132,8 +152,12 @@ const Task = () => {
                     </label>
                     <br />
 
-                    <Field name="priority" className="btn btn-secondary dropdown-toggle" as="select">
-                    <option value="Select_Priority">Select an option</option>
+                    <Field
+                      name="priority"
+                      className="btn btn-secondary dropdown-toggle"
+                      as="select"
+                    >
+                      <option value="Select_Priority">Select an option</option>
                       <option value="Normal">Normal</option>
                       <option value="Important">Important</option>
                       <option value="Priority">Priority</option>
@@ -186,41 +210,40 @@ const Task = () => {
                           </div>
                           <div className="modal-body">
                             <ul typeof="none">
-                                {MemberList.map((member, index) => {
-                              return (
-                                <div className="form-check" key={index}>
-                                  <input
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    name="checkMember"
-                                    value={member.username}
-                                    id={member.username}
-                                    onChange={(e) => {
-                                      if (e.target.checked) {
-                                        setSelectMembers([
-                                          ...selectMembers,
-                                          e.target.value,
-                                        ]);
-                                      } else {
-                                        setSelectMembers(
-                                          selectMembers.filter(
-                                            (item) => item != e.target.value
-                                          )
-                                        );
-                                      }
-                                    }}
-                                  />
-                                  <label
-                                    className="form-check-label"
-                                    htmlFor={member.username}
-                                  >
-                                    {member.username}
-                                  </label>
-                                  <hr />
-                                </div>
-                              );
-                            })}
-
+                              {MemberList.map((member, index) => {
+                                return (
+                                  <div className="form-check" key={index}>
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      name="checkMember"
+                                      value={member.username}
+                                      id={member.username}
+                                      onChange={(e) => {
+                                        if (e.target.checked) {
+                                          setSelectMembers([
+                                            ...selectMembers,
+                                            e.target.value,
+                                          ]);
+                                        } else {
+                                          setSelectMembers(
+                                            selectMembers.filter(
+                                              (item) => item != e.target.value
+                                            )
+                                          );
+                                        }
+                                      }}
+                                    />
+                                    <label
+                                      className="form-check-label"
+                                      htmlFor={member.username}
+                                    >
+                                      {member.username}
+                                    </label>
+                                    <hr />
+                                  </div>
+                                );
+                              })}
                             </ul>
                             <button
                               type="button"
@@ -253,11 +276,24 @@ const Task = () => {
           </div>
         </div>
       </div>
-
       <div className="row">
-        
-        
+        {
+              (filterOptions=="All")?(
+                
+                (tasks.length<1)?(""):(
+                  tasks.map((task)=>{
+                    return <Cart key={task._id} data={task} />
+                  })
+                )
+              ):(
+                
+                tasks.filter(task=>task.Priority==filterOptions).map((task)=>{
+                  return <Cart key={task._id} data={task}/>
+                })
 
+
+              )
+            }
       </div>
     </div>
   );

@@ -4,7 +4,7 @@ import "./App.css";
 import { useSelector,useDispatch } from 'react-redux'
 import axios, { AxiosError } from "axios";
 import { apiuri } from "./constants";
-import { GetMemberList } from "./Redux/DataSlice";
+import { GetMemberList,GetTaskList } from "./Redux/DataSlice";
 
 
 
@@ -12,7 +12,7 @@ import { GetMemberList } from "./Redux/DataSlice";
 function App() {
   
   const user=useSelector(state=>state.LoginDetails.LogInUser);
-  const dispatch=useDispatch()
+  const dispatch=useDispatch();
 
  useEffect(() => {
     if (user.role === "Admin") {
@@ -26,7 +26,15 @@ function App() {
          if(err.toJSON().message==="Network Error"){
           alert('Connection is Poor!!,Chek your Connection');
          }
+
       })
+
+      axios.get(`${apiuri}/getTaskList`)
+      .then(({data})=>{
+        dispatch(GetTaskList({data:data}))
+      })
+
+      
     }
   },[]);
   
