@@ -7,10 +7,9 @@ const initialState = {
 
         IsLogIn:sessionStorage.getItem("IsLogIn")||"",
         LogInUser:encryptStorage1.getItem("user")||"",
-        MemberList:encryptStorage1.getItem('MemberList')||"",
-        TaskList:encryptStorage1.getItem('TaskList')||"",
-
-
+        MemberList:encryptStorage1.getItem('MemberList')||{},
+        TaskList:[],
+        Edit:{},
 }
 
 const LoginSlice = createSlice({
@@ -39,29 +38,39 @@ const LoginSlice = createSlice({
                 },
                 GetMemberList: (state,actions) => {
 
-                        
                         encryptStorage1.setItem('MemberList',actions.payload.data);
+                        state.MemberList=actions.payload.data;
+                       
+                },
+                CreateTask:(state,actions)=>{
+
+                        state.TaskList.push(actions.payload.data);
+
+                        console.log(state.TaskList)
 
                 },
                 GetTaskList:(state,actions)=>{
 
                         encryptStorage1.setItem('TaskList',actions.payload.data)
-
+                        // state.TaskList=actions.payload.data;
                 },
-
-                
+                EditTask:(state,actions)=>{
+                        state.Edit=actions.payload;
+                        encryptStorage2.setItem('EditTask',actions.payload)
+                }
         }
 
 })
 
-
 export const { 
         SignIn, 
         SignOut, 
+        CreateTask,
         GetMemberList ,
         GetTaskList ,
-       
-        
+        EditTask,
         } = LoginSlice.actions
+
+
 
 export default LoginSlice.reducer;

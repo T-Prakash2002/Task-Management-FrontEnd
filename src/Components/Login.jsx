@@ -39,6 +39,10 @@ export default function Login() {
                   dispatch(GetMemberList({ data: data }));
                 });
 
+                if(values.role==='Admin'){
+                  
+                }
+
                 navigate("/dashboard");
               } else {
                 alert("User Not Found! Try Again");

@@ -15,31 +15,38 @@ h3 {
   margin-bottom: 4px;
 }
 
-
-.card{
+.card {
   display: block;
   max-width: 350px;
   background-color: #f2f8f94b;
   border-radius: 4px;
   padding: 10px 15px;
   margin: 12px;
-box-shadow: 0 0 13px gainsboro;
+  box-shadow: 0 0 13px gainsboro;
 }
-.bi:hover
-{
-  
-  z-index: 1;
-  transform: scale(1.42);
-  transition: .5s;
+.items {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  flex-wrap: wrap;
+}
+.item ~ .item::before {
+  content: ", ";
 }
 
-.bi-trash:hover{
+.bi:hover {
+  z-index: 1;
+  transform: scale(1.42);
+  transition: 0.5s;
+}
+
+.bi-trash:hover {
   color: red;
 }
 
-.bi-info-circle:hover{
+.bi-info-circle:hover {
   color: blue;
 }
-.bi-pencil-square:hover{
+.bi-pencil-square:hover {
   color: rgb(16, 151, 11);
 }

@@ -39,8 +39,6 @@ export default function Registration() {
                 zipCode: values.zipCode,
               };
 
-              //console.log(`${apiuri}/${values.role}Registration`);
-
               const apiRes = await axios.post(
                 `${apiuri}/UserRegistration`,
                 {

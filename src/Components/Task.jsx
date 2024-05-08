@@ -1,44 +1,57 @@
 import React, { useEffect, useState } from "react";
-import { ErrorMessage, Field, Formik, Form } from "formik";
-import { CreateTaskValidation } from "../Validatation/validateform";
+import { useNavigate } from "react-router-dom";
 import { apiuri } from "../constants";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import Cart from "./Cart";
-import { GetMemberList, GetTaskList } from "../Redux/DataSlice";
+import { GetMemberList, GetTaskList,EditTask } from "../Redux/DataSlice";
+import { ErrorMessage, Field, Formik, Form } from "formik";
+import { CreateTaskValidation } from "../Validatation/validateform";
+
+
 
 
 const Task = () => {
   const user = useSelector((state) => state.LoginDetails.LogInUser);
   const IsLogIn = useSelector((state) => state.LoginDetails.IsLogIn);
+  const TaskLis = useSelector((state) => state.LoginDetails.TaskList);
   const [searchWords, setSearchWords] = useState();
+    const [selectMembers, setSelectMembers] = useState([]);
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [AllMembers, setAllMembers] = useState([]);
-  const [AllTasks, setAllTasks] = useState([]);
-
+  const [AllTasks, setAllTasks] = useState(TaskLis);
   let [filterOptions, setFilterOptions] = useState("All");
 
-  const [selectMembers, setSelectMembers] = useState([]);
-
+  // console.log(AllTasks);
   useEffect(() => {
     if (user.role === "Admin") {
       axios
         .get(`${apiuri}/getMemberList`)
         .then(({ data }) => {
-          setAllMembers(data);
           dispatch(GetMemberList({ data: data }));
+          setAllMembers(data);
         })
         .catch((err) => {
           if (err.toJSON().message === "Network Error") {
-            alert("Connection is Poor!!,Chek your Connection");
+            alert("Connection is Poor!!,Check your Connection");
           }
         });
 
       axios.get(`${apiuri}/getTaskList`).then(({ data }) => {
-        setAllTasks(data);
         dispatch(GetTaskList({ data: data }));
+        setAllTasks(data);
       });
+    }
+    if (user.role == "Member") {
+      axios
+        .get(`${apiuri}/getTaskParticularMember/${user.username}`)
+        .then(({ data }) => {
+          setAllTasks(data);
+          dispatch(GetTaskList({ data: data }));
+          console.log("taskmember");
+        });
     }
   }, []);
 
@@ -61,7 +74,6 @@ const Task = () => {
     TaskList = TaskList.filter((task) => task.Priority == filterOptions);
   }
 
-
   return (
     <div className="container-fluid ">
       <div className="row">
@@ -80,18 +92,27 @@ const Task = () => {
         </div>
       </div>
       <div className="row my-3">
-        <div className="col-6">
-          <button
-            type="button"
+        {user.role == "Admin" ? (
+          <div className="col-6">
+            <button
+              type="button"
+              className="btn btn-outline-dark"
+            //   onClick={() => {
+            //     dispatch(EditTask(false))
+            //     navigate("/addTask");
+            //   }}
             data-bs-toggle="collapse"
             data-bs-target="#collapseExample"
             aria-expanded="false"
             aria-controls="collapseExample"
-            className="btn btn-outline-dark"
-          >
-            <i className="bi bi-patch-plus-fill">Add Task</i>
-          </button>
-        </div>
+            >
+              <i className="bi bi-patch-plus-fill">Add Task</i>
+            </button>
+          </div>
+        ) : (
+          ""
+        )}
+
         <div className="col-6">
           <select
             className="btn btn-outline-secondary dropdown-toggle"
@@ -116,9 +137,7 @@ const Task = () => {
         </div>
       </div>
 
-      {/*      Create Task Model     */}
-
-      <div className="row my-4">
+        <div className="row my-4">
         <div className="col">
           <div className="collapse" id="collapseExample">
             <div className="card card-body">
@@ -145,9 +164,11 @@ const Task = () => {
 
                   //   console.log(`${apiuri}/Registration`);
                   if (IsLogIn) {
-                    const apiRes = await axios.post(`${apiuri}/createTask`, {
+                    await axios.post(`${apiuri}/createTask`, {
                       ...TaskDetails,
                     });
+
+                    window.location.reload();
                   } else {
                     alert("LogIn Is Must");
                   }
@@ -328,9 +349,21 @@ const Task = () => {
           </div>
         </div>
       </div>
+
+
+
+
       <div className="row">
-        {TaskList.map((task) => {
-          return <Cart key={task._id} data={task} />;
+        {TaskList.map((task, index) => {
+          return (
+            <Cart
+              key={index}
+              index={index}
+              data={task}
+              setAllMembers={setAllMembers}
+              setAllTasks={setAllTasks}
+            />
+          );
         })}
       </div>
     </div>
