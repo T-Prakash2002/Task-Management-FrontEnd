@@ -96,11 +96,7 @@ const Task = () => {
           <div className="col-6">
             <button
               type="button"
-              className="btn btn-outline-dark"
-            //   onClick={() => {
-            //     dispatch(EditTask(false))
-            //     navigate("/addTask");
-            //   }}
+              className="btn btn-outline-dark "
             data-bs-toggle="collapse"
             data-bs-target="#collapseExample"
             aria-expanded="false"
@@ -137,10 +133,10 @@ const Task = () => {
         </div>
       </div>
 
-        <div className="row my-4">
-        <div className="col">
+        <div className="row">
+        <div className="col-12">
           <div className="collapse" id="collapseExample">
-            <div className="card card-body">
+            <div className="Task p-sm-5">
               <Formik
                 initialValues={{
                   Task_Name: "",
@@ -157,6 +153,7 @@ const Task = () => {
                     assigner: user.username,
                     Task_Name: values.Task_Name,
                     description: values.description,
+                    CreatedAt:new Date(),
                     TaskDeadLineDate: values.TaskDeadLineDate,
                     priority: values.priority,
                     assigned_member: selectMembers,
@@ -360,6 +357,7 @@ const Task = () => {
               key={index}
               index={index}
               data={task}
+              TaskList={TaskList}
               setAllMembers={setAllMembers}
               setAllTasks={setAllTasks}
             />

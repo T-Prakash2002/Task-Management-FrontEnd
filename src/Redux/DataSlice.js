@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { apiuri } from "../constants";
 import { encryptStorage1, encryptStorage2 } from "../Encrypt/Encrpt";
+import { act } from "react";
 
 const initialState = {
 
@@ -10,6 +11,7 @@ const initialState = {
         MemberList:encryptStorage1.getItem('MemberList')||{},
         TaskList:[],
         Edit:{},
+        InfoTask:encryptStorage2.getItem('InfoTask')
 }
 
 const LoginSlice = createSlice({
@@ -57,6 +59,10 @@ const LoginSlice = createSlice({
                 EditTask:(state,actions)=>{
                         state.Edit=actions.payload;
                         encryptStorage2.setItem('EditTask',actions.payload)
+                },
+                AboutTask:(state,actions)=>{
+                        state.InfoTask=actions.payload;
+                        encryptStorage2.setItem('InfoTask',actions.payload)
                 }
         }
 
@@ -69,6 +75,7 @@ export const {
         GetMemberList ,
         GetTaskList ,
         EditTask,
+        AboutTask
         } = LoginSlice.actions
 
 
