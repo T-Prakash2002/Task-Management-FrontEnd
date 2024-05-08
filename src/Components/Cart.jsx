@@ -6,21 +6,18 @@ import { apiuri } from "../constants";
 import axios from "axios";
 import { EditTask, AboutTask } from "../Redux/DataSlice";
 
-const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
+const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const [status, setStatus] = useState(data.taskStatus);
   const user = useSelector((state) => state.LoginDetails.LogInUser);
-
   const info = useSelector((state) => state.LoginDetails?.InfoTask);
 
   const createdate = new Date(info?.CreatedAt);
   const createyear = createdate.getFullYear();
   const createmonth = String(createdate.getMonth() + 1).padStart(2, "0");
   const createday = String(createdate.getDate()).padStart(2, "0");
-
-  const createformattedDate = `${createyear}-${createmonth}-${createday}`;
-
+  const createformatedDate = `${createyear}-${createmonth}-${createday}`;
   const date = new Date(info?.TaskDueDate);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -28,8 +25,6 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
 
   const formattedDate = `${year}-${month}-${day}`;
 
-
-    console.log(info)
   useEffect(() => {
     if (user.role === "Admin") {
       axios
@@ -52,11 +47,10 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
         .get(`${apiuri}/getTaskParticularMember/${user.username}`)
         .then(({ data }) => {
           setAllTasks(data);
-
           console.log("taskmember");
         });
     }
-  }, []);
+  }, [status]);
 
   function differenceInDay(data) {
     const endDate = new Date(data.TaskDueDate);
@@ -70,6 +64,27 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
 
     return differenceInDays;
   }
+  const handleChangeStatus = async (val, id) => {
+    let remin=false;
+    if(val=='Completed'){
+        remin=false;
+    }else{
+        remin=true;
+    }
+
+    const apiRes = await axios.put(`${apiuri}/updateStatus/${id}`, {
+      taskStatus: val,
+      reminder:remin,
+    });
+
+    if (apiRes.data !== "Update Failed") {
+      
+      console.log("Successfully Update");
+    } else {
+      console.log("Update Failed");
+    }
+  };
+
 
   return (
     <>
@@ -119,6 +134,29 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
             </span>
           </div>
 
+          <div>
+            <strong>Status:</strong>
+            <select
+              value={status}
+              className="dropdown-toggle bg-outline-warning w-50 ms-2"
+              onChange={async (e) => {
+                console.log(e.target.value);
+                setStatus(e.target.value);
+                handleChangeStatus(e.target.value, data._id);
+              }}
+            >
+              <option className="dropdown-item " value="Pending">
+                Pending
+              </option>
+              <option className="dropdown-item " value="Progress">
+                Progress
+              </option>
+              <option className="dropdown-item" value="Completed">
+                Completed
+              </option>
+            </select>
+          </div>
+
           <div className="fw-bolder fs-5">
             <sub className="d-flex gap-2">
               <i
@@ -127,6 +165,7 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
                   dispatch(EditTask(data));
                   navigate(`/EditTask`);
                 }}
+               
               ></i>
 
               <i
@@ -224,21 +263,12 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
                   </div>
                   <div className="card-text d-flex">
                     <strong>Task Created Date:</strong>
-                    <span>{createformattedDate}</span>
+                    <span>{createformatedDate}</span>
                   </div>
                   <div className="card-text d-flex">
                     <strong>Task Due Date:</strong>
                     <span>{formattedDate}</span>
                   </div>
-                </div>
-                <div className="modal-footer">
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                  >
-                    Close
-                  </button>
                 </div>
               </div>
             </div>

@@ -38,11 +38,6 @@ export default function Login() {
                 await axios.get(`${apiuri}/getMemberList`).then(({ data }) => {
                   dispatch(GetMemberList({ data: data }));
                 });
-
-                if(values.role==='Admin'){
-                  
-                }
-
                 navigate("/dashboard");
               } else {
                 alert("User Not Found! Try Again");

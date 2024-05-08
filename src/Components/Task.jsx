@@ -4,26 +4,24 @@ import { apiuri } from "../constants";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import Cart from "./Cart";
-import { GetMemberList, GetTaskList,EditTask } from "../Redux/DataSlice";
+import { GetMemberList, GetTaskList, EditTask } from "../Redux/DataSlice";
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import { CreateTaskValidation } from "../Validatation/validateform";
-
-
-
+import { encryptStorage1 } from "../Encrypt/Encrpt";
 
 const Task = () => {
   const user = useSelector((state) => state.LoginDetails.LogInUser);
   const IsLogIn = useSelector((state) => state.LoginDetails.IsLogIn);
   const TaskLis = useSelector((state) => state.LoginDetails.TaskList);
   const [searchWords, setSearchWords] = useState();
-    const [selectMembers, setSelectMembers] = useState([]);
+  const [selectMembers, setSelectMembers] = useState([]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [AllMembers, setAllMembers] = useState([]);
   const [AllTasks, setAllTasks] = useState(TaskLis);
   let [filterOptions, setFilterOptions] = useState("All");
-
+  const [reminderTask, setReminderTask] = useState([]);
   // console.log(AllTasks);
   useEffect(() => {
     if (user.role === "Admin") {
@@ -51,10 +49,14 @@ const Task = () => {
           setAllTasks(data);
           dispatch(GetTaskList({ data: data }));
           console.log("taskmember");
+          setReminderTask(data.filter((item) => item.reminder == true));
         });
     }
   }, []);
 
+  // setReminderTask(AllTasks.filter(item=>item.reminder==true))
+
+  console.log(reminderTask);
   let TaskList = AllTasks;
 
   if (searchWords?.length) {
@@ -90,17 +92,79 @@ const Task = () => {
             />
           </form>
         </div>
+
+        {/* Reminder Task Button */}
+
+        {user.role == "Member" ? (
+          <div className="col">
+            <button
+              type="button"
+              className="btn btn-outline-primary position-relative"
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+            >
+              <i
+                className="bi bi-bell"
+                data-bs-toggle="popover"
+                title="Reminder"
+              ></i>
+              <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {reminderTask.length}
+              </span>
+            </button>
+
+            <div
+              className="modal fade"
+              id="staticBackdrop"
+              data-bs-backdrop="static"
+              data-bs-keyboard="false"
+              tabIndex="-1"
+              aria-labelledby="staticBackdropLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog  modal-dialog-scrollable">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="staticBackdropLabel">
+                      Notifications
+                    </h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div className="modal-body">
+                   <ul type="circle">
+                    {
+                      reminderTask.map((item,index)=>{
+                        return <li className="border my-4" key={index}>{item.Task_Name} is {item.taskStatus}!! Hurry Up!!</li>
+                      })
+                    }
+                    </ul> 
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          ""
+        )}
+
+        {/* ----------------  style={{z-index:11}}*/}
       </div>
-      <div className="row my-3">
+
+      <div className="row my-3 d-flex">
         {user.role == "Admin" ? (
           <div className="col-6">
             <button
               type="button"
               className="btn btn-outline-dark "
-            data-bs-toggle="collapse"
-            data-bs-target="#collapseExample"
-            aria-expanded="false"
-            aria-controls="collapseExample"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseExample"
+              aria-expanded="false"
+              aria-controls="collapseExample"
             >
               <i className="bi bi-patch-plus-fill">Add Task</i>
             </button>
@@ -133,7 +197,7 @@ const Task = () => {
         </div>
       </div>
 
-        <div className="row">
+      <div className="row">
         <div className="col-12">
           <div className="collapse" id="collapseExample">
             <div className="Task p-sm-5">
@@ -153,7 +217,7 @@ const Task = () => {
                     assigner: user.username,
                     Task_Name: values.Task_Name,
                     description: values.description,
-                    CreatedAt:new Date(),
+                    CreatedAt: new Date(),
                     TaskDeadLineDate: values.TaskDeadLineDate,
                     priority: values.priority,
                     assigned_member: selectMembers,
@@ -346,9 +410,6 @@ const Task = () => {
           </div>
         </div>
       </div>
-
-
-
 
       <div className="row">
         {TaskList.map((task, index) => {
