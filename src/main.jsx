@@ -10,6 +10,8 @@ import DashBoard from "./Components/DashBoard.jsx";
 import { Provider } from "react-redux";
 import { store } from "./Redux/store.js";
 import EditTask from "./Components/EditTask.jsx";
+import ParticularTask from "./Components/ParticularTask.jsx";
+import Index from "./Components/Index.jsx";
 
 
 const router = createBrowserRouter([
@@ -17,6 +19,10 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
+      {
+        path:'',
+        element:<Index />
+      },
       {
         path: "login",
         element: <Login />,
@@ -33,6 +39,10 @@ const router = createBrowserRouter([
         path: "task",
         element: <Task />,
       },
+      {
+          path:'particularTask',
+          element:<ParticularTask />
+        },
       {
         path: "profile",
         element: <Profile />,

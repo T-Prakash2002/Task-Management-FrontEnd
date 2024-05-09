@@ -1,14 +1,16 @@
 
 .loginpage,.registrationpage{
-    min-width: 500px;
-    max-width: 700px;
     display: flex;
     justify-content:center;
     
 }
-.registrationpage{
-    top:0%;
-}
+
 .err{
     color: #f35050;
+}
+.slider-container{
+    height: 160px;
+}
+.count{
+    font-size:100px;
 }

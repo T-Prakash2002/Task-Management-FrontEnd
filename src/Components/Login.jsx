@@ -12,9 +12,9 @@ export default function Login() {
   const dispatch = useDispatch();
 
   return (
-    <div className="loginpage">
-      <div className="card w-50">
-        <div className="card-body">
+    <div className="p-4 p-md-5">
+      <div className="row">
+        <div className="col">
           <Formik
             initialValues={{ username: "", password: "", role: "" }}
             validationSchema={Loginvalidateform}
@@ -47,6 +47,7 @@ export default function Login() {
           >
             <Form>
               <h3 className="text-center">Login</h3>
+              <hr className="border border-danger border-2 opacity-50" />
               <div className="mb-3">
                 <label htmlFor="username">User Name</label>
                 <Field type="text" name="username" className="form-control" />

@@ -38,7 +38,6 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
             alert("Connection is Poor!!,Check your Connection");
           }
         });
-      console.log("useeffect card");
       axios.get(`${apiuri}/getTaskList`).then(({ data }) => {
         setAllTasks(data);
       });
@@ -108,7 +107,7 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
 
   return (
     <>
-      <div className="card" key={index}>
+      <div className="card col-12 col-sm-6 col-md-4 col-xl-3" key={index}>
         <sup>
           <i
             className={
@@ -206,99 +205,13 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
 
               <i
                 className="bi bi-info-circle btn"
-                data-bs-toggle="modal"
-                data-bs-target="#staticBackdrop"
                 onClick={() => {
                   dispatch(AboutTask(data));
+                  navigate('/particularTask')
                 }}
               ></i>
             </sub>
           </div>
-          <div
-            className="modal fade"
-            id="staticBackdrop"
-            data-bs-backdrop="static"
-            data-bs-keyboard="false"
-            tabIndex="-1"
-            aria-labelledby="..."
-            aria-hidden="true"
-          >
-            <div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-              <div className="modal-content">
-                <div className="modal-header ms-3">
-                  <h1 className="modal-title fs-5" id="staticBackdropLabel">
-                    <i
-                      className={
-                        info?.Priority == "Priority"
-                          ? "text-danger fw-bold bi bi-circle-fill mx-2"
-                          : info?.Priority == "Important"
-                          ? "text-success fw-bold bi bi-circle-fill mx-2"
-                          : "text-primary fw-bold bi bi-circle-fill mx-2"
-                      }
-                    ></i>
-                    {info?.Task_Name}
-                  </h1>
-                  <button
-                    type="button"
-                    className="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div className="modal-body ms-3">
-                  <div>
-                    <strong>Description:</strong>
-                    <p>{info?.Description}</p>
-                  </div>
-                  <div className="card-text d-flex">
-                    <strong>Assigner_Name:</strong>
-                    <span>{info?.Assigner_Name}</span>
-                  </div>
-                  <div className="card-text d-flex">
-                    <strong>Allocated_Member:</strong>
-                    <span className="items">
-                      {info?.Assigned_members?.map((list, index) => {
-                        return (
-                          <span className="item" key={index}>
-                            {list}
-                          </span>
-                        );
-                      })}
-                    </span>
-                  </div>
-                  <div className="card-text d-flex">
-                    <strong>Priority Status:</strong>
-                    <span
-                      className={
-                        info?.Priority == "Priority"
-                          ? "text-danger fw-bold"
-                          : info?.Priority == "Important"
-                          ? "text-success fw-bold"
-                          : "text-primary fw-bold"
-                      }
-                    >
-                      {info?.Priority}
-                    </span>
-                  </div>
-                  <div className="card-text d-flex">
-                    <strong>Task Created Date:</strong>
-                    <span>{createformatedDate}</span>
-                  </div>
-                  <div className="card-text d-flex">
-                    <strong>Task Due Date:</strong>
-                    <span>{formattedDate}</span>
-                  </div>
-                  <div className="card-text d-flex">
-                    <strong>Task Due Time:</strong>
-                    <span>{info?.TaskDueTime}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/* Edit Task */}
-
-          {/* ------------------------------------------------------------------------------------------- */}
         </div>
       </div>
     </>

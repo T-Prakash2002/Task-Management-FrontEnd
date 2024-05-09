@@ -11,7 +11,8 @@ const initialState = {
         MemberList:encryptStorage1.getItem('MemberList')||{},
         TaskList:[],
         Edit:{},
-        InfoTask:encryptStorage2.getItem('InfoTask')
+        InfoTask:encryptStorage2.getItem('InfoTask'),
+        CurRoute:""
 }
 
 const LoginSlice = createSlice({
@@ -63,7 +64,7 @@ const LoginSlice = createSlice({
                 AboutTask:(state,actions)=>{
                         state.InfoTask=actions.payload;
                         encryptStorage2.setItem('InfoTask',actions.payload)
-                }
+                },
         }
 
 })
@@ -75,7 +76,8 @@ export const {
         GetMemberList ,
         GetTaskList ,
         EditTask,
-        AboutTask
+        AboutTask,
+        
         } = LoginSlice.actions
 
 

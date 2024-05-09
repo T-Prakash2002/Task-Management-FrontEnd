@@ -8,7 +8,10 @@ import { GetMemberList, GetTaskList } from "../Redux/DataSlice";
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import { CreateTaskValidation } from "../Validatation/validateform";
 
+
+
 const Task = () => {
+
   const user = useSelector((state) => state.LoginDetails.LogInUser);
   const IsLogIn = useSelector((state) => state.LoginDetails.IsLogIn);
   const TaskLis = useSelector((state) => state.LoginDetails.TaskList);
@@ -21,7 +24,7 @@ const Task = () => {
   const [AllTasks, setAllTasks] = useState(TaskLis);
   let [filterOptions, setFilterOptions] = useState("All");
   const [reminderTask, setReminderTask] = useState([]);
-  
+
   useEffect(() => {
     if (user.role === "Admin") {
       axios
@@ -71,7 +74,7 @@ const Task = () => {
     TaskList = TaskList.filter((task) => task.Priority == filterOptions);
   }
 
-    function differenceInDay(data) {
+  function differenceInDay(data) {
     const endDate = new Date(data.TaskDueDate);
     const startDate = Date.now();
     const timeDifferenceMS = endDate - startDate;
@@ -83,16 +86,16 @@ const Task = () => {
 
     if (differenceInDays == 1 || differenceInDays == 0) {
       if (data?.Priority != "Priority") {
-        let r=true
-        handleupdatePriority(data._id,r);
+        let r = true;
+        handleupdatePriority(data._id, r);
       }
     }
     return differenceInDays;
   }
-  
+
   return (
-    <div className="container-fluid ">
-      <div className="row">
+    <div className="container-fluid">
+      <div className="row ">
         <div className="col">
           <form className="d-flex" role="search">
             <input
@@ -150,42 +153,39 @@ const Task = () => {
                     ></button>
                   </div>
                   <div className="modal-body">
-                    
-                      {
-                      reminderTask?.map((item, index) => {
-                        return (
-                          <div className="border p-3" key={index}>
-                            {
-                              (item?.Priority=="Priority")?(
-                                <span>
-                                    <i className="text-danger fw-bold bi bi-circle-fill mx-2"
-            // className={
-            //   item.Priority == "Priority"
-            //     ? "text-danger fw-bold bi bi-circle-fill mx-2"
-            //     : item.Priority == "Important"
-            //     ? "text-success fw-bold bi bi-circle-fill mx-2"
-            //     : "text-primary fw-bold bi bi-circle-fill mx-2"
-            // }
-          ></i>
-                                  "<strong className="text-danger">{item?.Task_Name}</strong>" is {item?.Priority},Let's Do it now</span>
-                              ):(item?.taskStatus=="Pending")?(
-                                <span>
-                                  <i 
-            className={
-              item.Priority == "Priority"
-                ? "text-danger fw-bold bi bi-circle-fill mx-2"
-                : item.Priority == "Important"
-                ? "text-success fw-bold bi bi-circle-fill mx-2"
-                : "text-primary fw-bold bi bi-circle-fill mx-2"
-            }
-          ></i>
-                                  "<strong>{item?.Task_Name}</strong>" Task is Newly assigned from <strong>{item?.Assigner_Name}</strong></span>
-                              ):""
-                            }
-                          </div>
-                        );
-                      })}
-                    
+                    {reminderTask?.map((item, index) => {
+                      return (
+                        <div className="border p-3" key={index}>
+                          {item?.Priority == "Priority" ? (
+                            <span>
+                              <i className="text-danger fw-bold bi bi-circle-fill mx-2"></i>
+                              "
+                              <strong className="text-danger">
+                                {item?.Task_Name}
+                              </strong>
+                              " is {item?.Priority},Let's Do it now
+                            </span>
+                          ) : item?.taskStatus == "Pending" ? (
+                            <span>
+                              <i
+                                className={
+                                  item.Priority == "Priority"
+                                    ? "text-danger fw-bold bi bi-circle-fill mx-2"
+                                    : item.Priority == "Important"
+                                    ? "text-success fw-bold bi bi-circle-fill mx-2"
+                                    : "text-primary fw-bold bi bi-circle-fill mx-2"
+                                }
+                              ></i>
+                              "<strong>{item?.Task_Name}</strong>" Task is Newly
+                              assigned from{" "}
+                              <strong>{item?.Assigner_Name}</strong>
+                            </span>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -194,8 +194,6 @@ const Task = () => {
         ) : (
           ""
         )}
-
-        {/* ----------------  style={{z-index:11}}*/}
       </div>
 
       <div className="row my-3 d-flex">
@@ -268,7 +266,7 @@ const Task = () => {
                     assigned_member: selectMembers,
                   };
 
-                    console.log(TaskDetails);
+                  console.log(TaskDetails);
                   if (IsLogIn) {
                     await axios.post(`${apiuri}/createTask`, {
                       ...TaskDetails,
@@ -469,7 +467,7 @@ const Task = () => {
         </div>
       </div>
 
-      <div className="row">
+      <div className="row d-flex">
         {TaskList.map((task, index) => {
           return (
             <Cart

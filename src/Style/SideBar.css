@@ -17,3 +17,6 @@
     background-color: aliceblue;
     color: rgb(50, 182, 160);
 }
+.breadcrumb{
+    --bs-breadcrumb-divider:'';
+}

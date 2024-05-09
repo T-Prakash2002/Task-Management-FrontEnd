@@ -4,19 +4,16 @@ import { Outlet, Link, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { SignOut } from "../Redux/DataSlice";
 import { useNavigate } from "react-router-dom";
-import { encryptStorage1 } from "../Encrypt/Encrpt";
-
-import Login from "./Login";
+import { useLocation } from "react-router-dom";
 
 const SideBar = ({ IsLogIn }) => {
   const user = useSelector((state) => state.LoginDetails.LogInUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const val1 = encryptStorage1.getItem("user");
+  const { pathname} = useLocation();
 
   return (
-    <div className="container-fluid">
+    <>
       <nav className="navbar navbar-expand-md navbar-dark bg-dark">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
@@ -34,24 +31,34 @@ const SideBar = ({ IsLogIn }) => {
             <span className="bi bi-three-dots fs-6"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-
-            {IsLogIn?(
+            {IsLogIn ? (
               <ul className="navbar-nav me-auto mb-lg-0">
-              <li className="nav-item">
-                <NavLink to={"/dashboard"} className="nav-link text-white">
-                  <i className="bi bi-speedometer fs-5"></i>
-                  <span className=" mx-2">DashBoard</span>
-                </NavLink>
-              </li>
-              <li className="nav-item">
-                <NavLink to={"/task"} className="nav-link text-white ">
-                  <i className="bi bi-card-checklist fs-5"></i>
-                  <span className="mx-2">Task</span>
-                </NavLink>
-              </li>
-            </ul>
-            ):''
-            }
+                <li className="nav-item">
+                  <NavLink to={"/dashboard"} className="nav-link text-white">
+                    <i className="bi bi-speedometer fs-5"></i>
+                    <span className=" mx-2">DashBoard</span>
+                  </NavLink>
+                </li>
+                <li className="nav-item">
+                  <NavLink to={"/task"} className="nav-link text-white ">
+                    <i className="bi bi-card-checklist fs-5"></i>
+                    <span className="mx-2">Task</span>
+                  </NavLink>
+                </li>
+                {user.role == "Admin" ? (
+                  <li className="nav-item">
+                    <NavLink to={"/register"} className="nav-link text-white ">
+                      <i className="bi bi-person-add fs-5"></i>
+                      <span className="mx-2">Add Users</span>
+                    </NavLink>
+                  </li>
+                ) : (
+                  ""
+                )}
+              </ul>
+            ) : (
+              ""
+            )}
 
             {IsLogIn ? (
               <div className="dropdown ms-auto">
@@ -93,7 +100,7 @@ const SideBar = ({ IsLogIn }) => {
                 </ul>
               </div>
             ) : (
-              <div className="d-flex justify-content-center">
+              <div className="d-flex justify-content-center ms-auto">
                 <Link to="/login" className=" d-sm-none"></Link>
 
                 <Link to="/login">
@@ -108,13 +115,31 @@ const SideBar = ({ IsLogIn }) => {
         </div>
       </nav>
 
+      <div className="row">
+        <nav
+        className="breadcrumb ms-5 mt-2"
+          aria-label="breadcrumb"
+        >
+          <ol className="breadcrumb">
+            <li className="breadcrumb-item">
+              <Link to="">Home</Link>
+            </li>
+            {
+              (pathname)?<li className="breadcrumb-item" aria-current="page">
+              {pathname}
+            </li>:""
+            }
+          </ol>
+        </nav>
+      </div>
+
       {/* Outlet */}
       <div className="row">
-        <div className="container">
+        <div className="container-fluid">
           <Outlet />
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

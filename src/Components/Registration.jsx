@@ -2,12 +2,17 @@ import { Registervalidateform } from "../Validatation/validateform";
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import { apiuri } from "../constants";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+
 
 export default function Registration() {
+
+  const user = useSelector((state) => state.LoginDetails.LogInUser);
+
   return (
-    <div className="registrationpage">
-      <div className="card w-75 ">
-        <div className="card-body">
+    <div className="p-4 p-md-5">
+      <div className="row ">
+        <div className="col">
           <Formik
             initialValues={{
               username: "",
@@ -39,20 +44,22 @@ export default function Registration() {
                 zipCode: values.zipCode,
               };
 
-              const apiRes = await axios.post(
+              if(user.role=='Admin'){
+                const apiRes = await axios.post(
                 `${apiuri}/UserRegistration`,
                 {
                   ...userDetails,
                 }
               );
               console.log(apiRes.data);
+              }
               resetForm();
             }}
           >
             <Form className="row">
-              <h3 className="text-center">Registration</h3>
-
-              <div className="mb-3 col-md-6">
+              <h2 className="text-center">Registration</h2>
+              <hr className="border border-danger border-2 opacity-50" />
+              <div className="mb-3 col-sm-6">
                 <label htmlFor="username">User Name</label>
                 <Field type="text" name="username" className="form-control" />
                 <ErrorMessage
@@ -62,7 +69,7 @@ export default function Registration() {
                 />
               </div>
 
-              <div className="col-md-6">
+              <div className="col-sm-6">
                 <label htmlFor="email">Email</label>
                 <Field type="text" name="email" className="form-control" />
                 <ErrorMessage
@@ -72,7 +79,7 @@ export default function Registration() {
                 />
               </div>
 
-              <div className="col-md-6">
+              <div className="col-sm-6">
                 <label htmlFor="age">Age</label>
                 <Field
                   type="text"
@@ -86,7 +93,7 @@ export default function Registration() {
                 />
               </div>
 
-              <div className="mb-3 col-md-6">
+              <div className="mb-3 col-sm-6">
                 <label htmlFor="phonenumber">Phone Number</label>
                 <Field type="tel" name="phonenumber" className="form-control" />
                 <ErrorMessage
@@ -96,7 +103,7 @@ export default function Registration() {
                 />
               </div>
 
-              <div className="col-md-6">
+              <div className="col-sm-6">
                 <label htmlFor="dataofjoin">Date of Joining</label>
                 <Field type="date" name="dataofjoin" className="form-control" />
                 <ErrorMessage
@@ -106,7 +113,7 @@ export default function Registration() {
                 />
               </div>
 
-              <div className="mb-3">
+              <div className="col-sm-6 mb-3">
                 <label>Role:</label>
                 <br />
                 <Field as="select" name="role"  className="form-control-sm">
@@ -132,7 +139,7 @@ export default function Registration() {
                 />
               </div>
 
-              <div className="mb-3">
+              <div className="col-sm-6 mb-3">
                 <label htmlFor="city">City</label>
                 <br />
                 <Field type="text" name="city" className="form-control" />
@@ -143,7 +150,7 @@ export default function Registration() {
                 />
               </div>
 
-              <div className="mb-3">
+              <div className="mb-3 col-sm-6">
                 <label htmlFor="zipCode">Zip Code</label>
                 <br />
                 <Field type="text" name="zipCode" className="form-control" />
@@ -154,7 +161,7 @@ export default function Registration() {
                 />
               </div>
 
-              <div className="mb-3">
+              <div className="mb-3 col-sm-6">
                 <label htmlFor="password">Password</label>
                 <br />
                 <Field
@@ -169,7 +176,7 @@ export default function Registration() {
                 />
               </div>
 
-              <div className="mb-3">
+              <div className="mb-3 col-sm-6">
                 <label htmlFor="Cpassword">Confirm Password</label>
                 <br />
                 <Field
