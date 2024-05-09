@@ -4,10 +4,9 @@ import { apiuri } from "../constants";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import Cart from "./Cart";
-import { GetMemberList, GetTaskList, EditTask } from "../Redux/DataSlice";
+import { GetMemberList, GetTaskList } from "../Redux/DataSlice";
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import { CreateTaskValidation } from "../Validatation/validateform";
-import { encryptStorage1 } from "../Encrypt/Encrpt";
 
 const Task = () => {
   const user = useSelector((state) => state.LoginDetails.LogInUser);
@@ -22,7 +21,7 @@ const Task = () => {
   const [AllTasks, setAllTasks] = useState(TaskLis);
   let [filterOptions, setFilterOptions] = useState("All");
   const [reminderTask, setReminderTask] = useState([]);
-  // console.log(AllTasks);
+  
   useEffect(() => {
     if (user.role === "Admin") {
       axios
@@ -33,7 +32,7 @@ const Task = () => {
         })
         .catch((err) => {
           if (err.toJSON().message === "Network Error") {
-            alert("Connection is Poor!!,Check your Connection");
+            console.log("Backend Connection is poor!!!");
           }
         });
 
@@ -48,15 +47,11 @@ const Task = () => {
         .then(({ data }) => {
           setAllTasks(data);
           dispatch(GetTaskList({ data: data }));
-          console.log("taskmember");
           setReminderTask(data.filter((item) => item.reminder == true));
         });
     }
   }, []);
 
-  // setReminderTask(AllTasks.filter(item=>item.reminder==true))
-
-  console.log(reminderTask);
   let TaskList = AllTasks;
 
   if (searchWords?.length) {
@@ -76,6 +71,25 @@ const Task = () => {
     TaskList = TaskList.filter((task) => task.Priority == filterOptions);
   }
 
+    function differenceInDay(data) {
+    const endDate = new Date(data.TaskDueDate);
+    const startDate = Date.now();
+    const timeDifferenceMS = endDate - startDate;
+
+    const timeDifferenceSecs = Math.floor(timeDifferenceMS / 1000);
+    const timeDifferenceMins = Math.floor(timeDifferenceMS / 60000);
+    const timeDifferenceHours = Math.floor(timeDifferenceMS / 3600000);
+    const differenceInDays = Math.floor(timeDifferenceMS / 86400000);
+
+    if (differenceInDays == 1 || differenceInDays == 0) {
+      if (data?.Priority != "Priority") {
+        let r=true
+        handleupdatePriority(data._id,r);
+      }
+    }
+    return differenceInDays;
+  }
+  
   return (
     <div className="container-fluid ">
       <div className="row">
@@ -101,7 +115,7 @@ const Task = () => {
               type="button"
               className="btn btn-outline-primary position-relative"
               data-bs-toggle="modal"
-              data-bs-target="#staticBackdrop"
+              data-bs-target="#staticBackdrop1"
             >
               <i
                 className="bi bi-bell"
@@ -109,23 +123,23 @@ const Task = () => {
                 title="Reminder"
               ></i>
               <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {reminderTask.length}
+                {reminderTask?.length}
               </span>
             </button>
 
             <div
               className="modal fade"
-              id="staticBackdrop"
+              id="staticBackdrop1"
               data-bs-backdrop="static"
               data-bs-keyboard="false"
               tabIndex="-1"
-              aria-labelledby="staticBackdropLabel"
+              aria-labelledby="staticBackdropLabel1"
               aria-hidden="true"
             >
               <div className="modal-dialog  modal-dialog-scrollable">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title" id="staticBackdropLabel">
+                    <h5 className="modal-title" id="staticBackdropLabel1">
                       Notifications
                     </h5>
                     <button
@@ -136,13 +150,42 @@ const Task = () => {
                     ></button>
                   </div>
                   <div className="modal-body">
-                   <ul type="circle">
-                    {
-                      reminderTask.map((item,index)=>{
-                        return <li className="border my-4" key={index}>{item.Task_Name} is {item.taskStatus}!! Hurry Up!!</li>
-                      })
-                    }
-                    </ul> 
+                    
+                      {
+                      reminderTask?.map((item, index) => {
+                        return (
+                          <div className="border p-3" key={index}>
+                            {
+                              (item?.Priority=="Priority")?(
+                                <span>
+                                    <i className="text-danger fw-bold bi bi-circle-fill mx-2"
+            // className={
+            //   item.Priority == "Priority"
+            //     ? "text-danger fw-bold bi bi-circle-fill mx-2"
+            //     : item.Priority == "Important"
+            //     ? "text-success fw-bold bi bi-circle-fill mx-2"
+            //     : "text-primary fw-bold bi bi-circle-fill mx-2"
+            // }
+          ></i>
+                                  "<strong className="text-danger">{item?.Task_Name}</strong>" is {item?.Priority},Let's Do it now</span>
+                              ):(item?.taskStatus=="Pending")?(
+                                <span>
+                                  <i 
+            className={
+              item.Priority == "Priority"
+                ? "text-danger fw-bold bi bi-circle-fill mx-2"
+                : item.Priority == "Important"
+                ? "text-success fw-bold bi bi-circle-fill mx-2"
+                : "text-primary fw-bold bi bi-circle-fill mx-2"
+            }
+          ></i>
+                                  "<strong>{item?.Task_Name}</strong>" Task is Newly assigned from <strong>{item?.Assigner_Name}</strong></span>
+                              ):""
+                            }
+                          </div>
+                        );
+                      })}
+                    
                   </div>
                 </div>
               </div>
@@ -206,6 +249,7 @@ const Task = () => {
                   Task_Name: "",
                   description: "",
                   TaskDeadLineDate: "",
+                  TaskDeadLineTime: "",
                   priority: "",
                   assigned_member: selectMembers,
                 }}
@@ -219,11 +263,12 @@ const Task = () => {
                     description: values.description,
                     CreatedAt: new Date(),
                     TaskDeadLineDate: values.TaskDeadLineDate,
+                    TaskDeadLineTime: values.TaskDeadLineTime,
                     priority: values.priority,
                     assigned_member: selectMembers,
                   };
 
-                  //   console.log(`${apiuri}/Registration`);
+                    console.log(TaskDetails);
                   if (IsLogIn) {
                     await axios.post(`${apiuri}/createTask`, {
                       ...TaskDetails,
@@ -276,6 +321,19 @@ const Task = () => {
                     <ErrorMessage
                       className="err small"
                       name="TaskDeadLineDate"
+                      component="div"
+                    />
+                  </div>
+                  <div className="col-12 col-md-6 mb-3">
+                    <label htmlFor="TaskDeadLineTime">DeadLine Date</label>
+                    <Field
+                      type="time"
+                      name="TaskDeadLineTime"
+                      className="form-control"
+                    />
+                    <ErrorMessage
+                      className="err small"
+                      name="TaskDeadLineTime"
                       component="div"
                     />
                   </div>

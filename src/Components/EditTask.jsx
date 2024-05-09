@@ -53,6 +53,7 @@ const EditTask = () => {
           Task_Name: EditData.Task_Name,
           description: EditData.Description,
           TaskDeadLineDate: formattedDate,
+          TaskDeadLineTime:EditData.TaskDueTime,
           priority: EditData.Priority,
         }}
         validationSchema={CreateTaskValidation}
@@ -77,6 +78,7 @@ const EditTask = () => {
             Task_Name: values.Task_Name,
             description: values.description,
             TaskDeadLineDate: values.TaskDeadLineDate,
+            TaskDeadLineTime:values.TaskDeadLineTime,
             priority: values.priority,
             assigned_member: tempAssignMember,
           };
@@ -128,7 +130,19 @@ const EditTask = () => {
               className="form-control"
             />
           </div>
-          
+          <div className="col-12 col-md-6 mb-3">
+                    <label htmlFor="TaskDeadLineTime">DeadLine Date</label>
+                    <Field
+                      type="time"
+                      name="TaskDeadLineTime"
+                      className="form-control"
+                    />
+                    <ErrorMessage
+                      className="err small"
+                      name="TaskDeadLineTime"
+                      component="div"
+                    />
+                  </div>
 
           <div className="col-12 col-sm-6 mb-3 ">
             <label htmlFor="status" className="">

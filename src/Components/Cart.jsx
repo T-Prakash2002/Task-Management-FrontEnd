@@ -6,7 +6,7 @@ import { apiuri } from "../constants";
 import axios from "axios";
 import { EditTask, AboutTask } from "../Redux/DataSlice";
 
-const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList}) => {
+const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [status, setStatus] = useState(data.taskStatus);
@@ -18,6 +18,7 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList}) => {
   const createmonth = String(createdate.getMonth() + 1).padStart(2, "0");
   const createday = String(createdate.getDate()).padStart(2, "0");
   const createformatedDate = `${createyear}-${createmonth}-${createday}`;
+
   const date = new Date(info?.TaskDueDate);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -37,7 +38,7 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList}) => {
             alert("Connection is Poor!!,Check your Connection");
           }
         });
-
+      console.log("useeffect card");
       axios.get(`${apiuri}/getTaskList`).then(({ data }) => {
         setAllTasks(data);
       });
@@ -47,7 +48,6 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList}) => {
         .get(`${apiuri}/getTaskParticularMember/${user.username}`)
         .then(({ data }) => {
           setAllTasks(data);
-          console.log("taskmember");
         });
     }
   }, [status]);
@@ -62,29 +62,49 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList}) => {
     const timeDifferenceHours = Math.floor(timeDifferenceMS / 3600000);
     const differenceInDays = Math.floor(timeDifferenceMS / 86400000);
 
+    if (differenceInDays == 1 || differenceInDays == 0) {
+      if (data?.Priority != "Priority") {
+        let r=true
+        handleupdatePriority(data._id,r);
+      }
+    }
     return differenceInDays;
   }
+
+  async function handleupdatePriority(id,r) {
+    console.log(data.Task_Name);
+    await axios
+      .put(`${apiuri}/handleupdatePriority/${id}`, {
+        Priority: "Priority",
+        reminder: r,
+      })
+      .then(({ data }) => {
+        console.log("success");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   const handleChangeStatus = async (val, id) => {
-    let remin=false;
-    if(val=='Completed'){
-        remin=false;
-    }else{
-        remin=true;
+    let remin = false;
+    if (val == "Completed") {
+      remin = false;
+    } else {
+      remin = true;
     }
 
     const apiRes = await axios.put(`${apiuri}/updateStatus/${id}`, {
       taskStatus: val,
-      reminder:remin,
+      reminder: remin,
     });
 
     if (apiRes.data !== "Update Failed") {
-      
       console.log("Successfully Update");
     } else {
       console.log("Update Failed");
     }
   };
-
 
   return (
     <>
@@ -165,7 +185,6 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList}) => {
                   dispatch(EditTask(data));
                   navigate(`/EditTask`);
                 }}
-               
               ></i>
 
               <i
@@ -268,6 +287,10 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList}) => {
                   <div className="card-text d-flex">
                     <strong>Task Due Date:</strong>
                     <span>{formattedDate}</span>
+                  </div>
+                  <div className="card-text d-flex">
+                    <strong>Task Due Time:</strong>
+                    <span>{info?.TaskDueTime}</span>
                   </div>
                 </div>
               </div>
