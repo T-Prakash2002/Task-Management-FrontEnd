@@ -28,7 +28,11 @@ const Task = () => {
   useEffect(() => {
     if (user.role === "Admin") {
       axios
-        .get(`${apiuri}/getMemberList`)
+        .get(`${apiuri}/getMemberList`,
+                  {
+                    headers: {
+                      auth: localStorage.getItem("userToken"),
+                    }})
         .then(({ data }) => {
           dispatch(GetMemberList({ data: data }));
           setAllMembers(data);
@@ -39,14 +43,22 @@ const Task = () => {
           }
         });
 
-      axios.get(`${apiuri}/getTaskList`).then(({ data }) => {
+      axios.get(`${apiuri}/getTaskList`,
+                  {
+                    headers: {
+                      auth: localStorage.getItem("userToken"),
+                    }}).then(({ data }) => {
         dispatch(GetTaskList({ data: data }));
         setAllTasks(data);
       });
     }
     if (user.role == "Member") {
       axios
-        .get(`${apiuri}/getTaskParticularMember/${user.username}`)
+        .get(`${apiuri}/getTaskParticularMember/${user.username}`,
+                  {
+                    headers: {
+                      auth: localStorage.getItem("userToken"),
+                    }})
         .then(({ data }) => {
           setAllTasks(data);
           dispatch(GetTaskList({ data: data }));
@@ -270,7 +282,11 @@ const Task = () => {
                   if (IsLogIn) {
                     await axios.post(`${apiuri}/createTask`, {
                       ...TaskDetails,
-                    });
+                    },
+                  {
+                    headers: {
+                      auth: localStorage.getItem("userToken"),
+                    }});
 
                     window.location.reload();
                   } else {

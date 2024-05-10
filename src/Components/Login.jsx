@@ -2,10 +2,11 @@ import { Loginvalidateform } from "../Validatation/validateform";
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import { apiuri } from "../constants";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { SignIn, GetMemberList } from "../Redux/DataSlice";
+import bcryptjs from "bcryptjs";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -19,25 +20,45 @@ export default function Login() {
             initialValues={{ username: "", password: "", role: "" }}
             validationSchema={Loginvalidateform}
             onSubmit={async (values, { resetForm }) => {
-
               console.log("login");
-              const apiResponse = await axios
-                .get(
-                  `${apiuri}/login/${values.username}/${values.password}/${values.role}`
-                )
-                .catch((err) => {
-                  if (err.toJSON().message === "Network Error") {
-                    alert("Connection is Poor!!,Chek your Connection");
-                  }
-                });
 
-              if (apiResponse.data && apiResponse.data != "Login Failed") {
+              const apiResponse = await axios.get(
+                `${apiuri}/login?username=${values.username}&role=${values.role}`,
+                
+              );
+
+              const isValid = await bcryptjs.compare(
+                values.password,
+                apiResponse.data.password
+              );
+              console.log(apiResponse.data)
+
+              if (isValid) {
                 console.log("Login Successfully!!!");
-                dispatch(SignIn(apiResponse.data));
 
-                await axios.get(`${apiuri}/getMemberList`).then(({ data }) => {
-                  dispatch(GetMemberList({ data: data }));
-                });
+                const apiResponse_User = await axios.get(
+                `${apiuri}/loginUser?username=${values.username}&role=${values.role}`,
+                
+              );
+
+              console.log(apiResponse_User.data._doc)
+
+              localStorage.setItem("userToken",apiResponse_User.data.tokenValid)
+
+                dispatch(SignIn({data:apiResponse_User.data._doc}));
+
+                if(values.role=="Admin"){
+                  await axios.get(`${apiuri}/getMemberList`,{
+                    headers: {
+                      auth: localStorage.getItem("userToken"),
+                    },
+                  }).then(
+                  ({ data }) => {
+                    dispatch(GetMemberList({ data: data }));
+                  },
+                  
+                );
+                }
                 navigate("/dashboard");
               } else {
                 alert("User Not Found! Try Again");
@@ -87,6 +108,12 @@ export default function Login() {
                   name="role"
                   component="div"
                 />
+              </div>
+
+              <div className="mb-3">
+                 <Link className="text-decoration-none" to="/register">
+                      New User<i className="bi bi-arrow-right-circle-fill ms-2 "></i>
+                    </Link>
               </div>
 
               <div className="mb-3">

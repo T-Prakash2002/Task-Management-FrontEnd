@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
 const SideBar = ({ IsLogIn }) => {
-  const user = useSelector((state) => state.LoginDetails.LogInUser);
+  const user = useSelector((state) => state.LoginDetails.LogInUser)||"";
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { pathname} = useLocation();
@@ -70,7 +70,7 @@ const SideBar = ({ IsLogIn }) => {
                   aria-expanded="false"
                 >
                   <span className="profile-img me-3 px-2 ">
-                    {user.username.charAt(0).toUpperCase()}
+                    {user?.username?.charAt(0).toUpperCase()}
                   </span>
                   <strong className=" d-sm-inline">{user.username}</strong>
                 </a>

@@ -6,7 +6,7 @@ import { act } from "react";
 
 const initialState = {
 
-        IsLogIn:sessionStorage.getItem("IsLogIn")||"",
+        IsLogIn:localStorage.getItem("userToken")||"",
         LogInUser:encryptStorage1.getItem("user")||"",
         MemberList:encryptStorage1.getItem('MemberList')||{},
         TaskList:[],
@@ -24,8 +24,7 @@ const LoginSlice = createSlice({
                         state.IsLogIn=true
                         encryptStorage1.setItem("user",actions.payload);
                         sessionStorage.setItem("IsLogIn",true)
-                        state.LogInUser = actions.payload;
-
+                        state.LogInUser = actions.payload.data;
                 },
 
                 SignOut: (state) => {
@@ -35,8 +34,7 @@ const LoginSlice = createSlice({
                         encryptStorage1.removeItem('MemberList')
                         sessionStorage.setItem("IsLogIn",false)
                         encryptStorage1.removeItem('TaskList')
-
-
+                        localStorage.removeItem('userToken')
 
                 },
                 GetMemberList: (state,actions) => {

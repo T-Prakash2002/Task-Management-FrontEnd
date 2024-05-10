@@ -3,10 +3,9 @@ import { ErrorMessage, Field, Formik, Form } from "formik";
 import { apiuri } from "../constants";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-
+import bcryptjs from "bcryptjs";
 
 export default function Registration() {
-
   const user = useSelector((state) => state.LoginDetails.LogInUser);
 
   return (
@@ -24,19 +23,22 @@ export default function Registration() {
               phonenumber: "",
               dataofjoin: "",
               address: "",
-              city:"",
-              zipCode:"",
+              city: "",
+              zipCode: "",
             }}
             validationSchema={Registervalidateform}
             onSubmit={async (values, { resetForm }) => {
               console.log("register");
 
+              const myHashPassword = await bcryptjs.hash(values.password, 3);
+
+
               const userDetails = {
                 username: values.username,
-                password: values.password,
+                password: myHashPassword,
                 email: values.email,
                 age: values.age,
-                role:values.role,
+                role: values.role,
                 phonenumber: values.phonenumber,
                 dataofjoin: values.dataofjoin,
                 address: values.address,
@@ -44,15 +46,15 @@ export default function Registration() {
                 zipCode: values.zipCode,
               };
 
-              if(user.role=='Admin'){
+              
                 const apiRes = await axios.post(
-                `${apiuri}/UserRegistration`,
-                {
-                  ...userDetails,
-                }
-              );
-              console.log(apiRes.data);
-              }
+                  `${apiuri}/UserRegistration`,
+                  {
+                    ...userDetails,
+                  },
+                );
+                console.log(apiRes.data);
+              
               resetForm();
             }}
           >
@@ -116,7 +118,7 @@ export default function Registration() {
               <div className="col-sm-6 mb-3">
                 <label>Role:</label>
                 <br />
-                <Field as="select" name="role"  className="form-control-sm">
+                <Field as="select" name="role" className="form-control-sm">
                   <option value="Select_user">Select an option</option>
                   <option value="Admin">Admin</option>
                   <option value="Member">Member</option>

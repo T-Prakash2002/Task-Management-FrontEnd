@@ -29,7 +29,11 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
   useEffect(() => {
     if (user.role === "Admin") {
       axios
-        .get(`${apiuri}/getMemberList`)
+        .get(`${apiuri}/getMemberList`,
+                  {
+                    headers: {
+                      auth: localStorage.getItem("userToken"),
+                    }})
         .then(({ data }) => {
           setAllMembers(data);
         })
@@ -38,13 +42,21 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
             alert("Connection is Poor!!,Check your Connection");
           }
         });
-      axios.get(`${apiuri}/getTaskList`).then(({ data }) => {
+      axios.get(`${apiuri}/getTaskList`,
+                  {
+                    headers: {
+                      auth: localStorage.getItem("userToken"),
+                    }}).then(({ data }) => {
         setAllTasks(data);
       });
     }
     if (user.role == "Member") {
       axios
-        .get(`${apiuri}/getTaskParticularMember/${user.username}`)
+        .get(`${apiuri}/getTaskParticularMember/${user.username}`,
+                  {
+                    headers: {
+                      auth: localStorage.getItem("userToken"),
+                    }})
         .then(({ data }) => {
           setAllTasks(data);
         });
@@ -76,7 +88,11 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
       .put(`${apiuri}/handleupdatePriority/${id}`, {
         Priority: "Priority",
         reminder: r,
-      })
+      },
+                  {
+                    headers: {
+                      auth: localStorage.getItem("userToken"),
+                    }})
       .then(({ data }) => {
         console.log("success");
       })
@@ -96,7 +112,11 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
     const apiRes = await axios.put(`${apiuri}/updateStatus/${id}`, {
       taskStatus: val,
       reminder: remin,
-    });
+    },
+                  {
+                    headers: {
+                      auth: localStorage.getItem("userToken"),
+                    }});
 
     if (apiRes.data !== "Update Failed") {
       console.log("Successfully Update");
@@ -191,7 +211,12 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
                 onClick={async (e) => {
                   if (user.role === "Admin") {
                     const apiRes = await axios.delete(
-                      `${apiuri}/deleteParticularTask/${data._id}`
+                      `${apiuri}/deleteParticularTask/${data._id}`,
+                  {
+                    headers: {
+                      auth: localStorage.getItem("userToken"),
+                    },
+                  }
                     );
                     if (apiRes != "Deleted Failed") {
                       alert("Deleted Success");
