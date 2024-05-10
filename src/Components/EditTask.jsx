@@ -45,7 +45,6 @@ const EditTask = () => {
 
   const formattedDate = `${year}-${month}-${day}`;
 
-    // console.log(EditData.Assigned_members,"   assign member");
   return (
     <div className="Task p-3 p-lg-5 w-75">
       <Formik
