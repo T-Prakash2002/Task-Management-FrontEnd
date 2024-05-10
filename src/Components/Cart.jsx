@@ -201,8 +201,10 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
               <i
                 className="bi bi-pencil-square btn"
                 onClick={() => {
-                  dispatch(EditTask(data));
+                 if(user.role=="Admin"){
+                   dispatch(EditTask(data));
                   navigate(`/EditTask`);
+                 }
                 }}
               ></i>
 
@@ -224,6 +226,8 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
                     } else {
                       alert("Delete Failed");
                     }
+                  }else{
+                    alert("Admin only delete this file")
                   }
                 }}
               ></i>

@@ -111,13 +111,14 @@ const Task = () => {
         <div className="col">
           <form className="d-flex" role="search">
             <input
-              className="form-control-sm me-2 border"
+              className="form-control me-2 border"
               type="search"
               placeholder="Search"
               aria-label="Search"
               onChange={(e) => {
                 setSearchWords(e.target.value);
               }}
+              style={{width:"200px"}}
             />
           </form>
         </div>
@@ -288,7 +289,6 @@ const Task = () => {
                       auth: localStorage.getItem("userToken"),
                     }});
 
-                    window.location.reload();
                   } else {
                     alert("LogIn Is Must");
                   }
