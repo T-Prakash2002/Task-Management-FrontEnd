@@ -7,74 +7,91 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { SignIn, GetMemberList } from "../Redux/DataSlice";
 import bcryptjs from "bcryptjs";
+import { encryptStorage1 } from "../Encrypt/Encrpt";
 
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  console.log("Login");
   return (
     <div className="p-4 p-md-5">
       <div className="row">
         <div className="col">
           <Formik
-            initialValues={{ username: "", password: "", role: "" }}
+            initialValues={{ email: "", password: "", role: "" }}
             validationSchema={Loginvalidateform}
-            onSubmit={async (values, { resetForm }) => {
+            onSubmit={async(values, { resetForm }) => {
               console.log("login");
 
+
               const apiResponse = await axios.get(
-                `${apiuri}/login?username=${values.username}&role=${values.role}`,
+                `${apiuri}/login?email=${values.email}&password=${values.password}&role=${values.role}`,
+              );
+
+              if(apiResponse.data !=="Login Failed"){
                 
-              );
-
-              const isValid = await bcryptjs.compare(
-                values.password,
-                apiResponse.data.password
-              );
-              console.log(apiResponse.data)
-
-              if (isValid) {
-                console.log("Login Successfully!!!");
-
-                const apiResponse_User = await axios.get(
-                `${apiuri}/loginUser?username=${values.username}&role=${values.role}`,
-                
-              );
-
-              console.log(apiResponse_User.data._doc)
-
-              localStorage.setItem("userToken",apiResponse_User.data.tokenValid)
-
-                dispatch(SignIn({data:apiResponse_User.data._doc}));
-
-                if(values.role=="Admin"){
-                  await axios.get(`${apiuri}/getMemberList`,{
-                    headers: {
-                      auth: localStorage.getItem("userToken"),
-                    },
-                  }).then(
-                  ({ data }) => {
-                    dispatch(GetMemberList({ data: data }));
-                  },
-                  
-                );
-                }
+                dispatch(SignIn({data:apiResponse.data._doc}));
+                encryptStorage1.setItem("userToken",apiResponse.data.tokenValid)
+                //  console.log(apiResponse.data._doc)
+                alert("Success")
                 navigate("/dashboard");
-              } else {
-                alert("User Not Found! Try Again");
+              }else{
+                alert("User Not Found !")
               }
+
+//               const isValid = await bcryptjs.compare(
+//                 values.password,
+//                 apiResponse.data.password
+//               );
+//               console.log(apiResponse.data)
+// 
+//               if (isValid) {
+//                 
+//                 const apiResponse_User = await axios.get(
+//                 `${apiuri}/loginUser?username=${values.username}&role=${values.role}&id=${apiResponse.data._id}`,
+//               );
+// 
+//               console.log(apiResponse_User.data._doc)
+// 
+//               localStorage.setItem("userToken",apiResponse_User.data.tokenValid)
+// 
+//                 dispatch(SignIn({data:apiResponse_User.data._doc}));
+//                 console.log("Login Successfully!!!");
+// 
+//                 if(values.role=="Admin"){
+// 
+//                   await axios.get(`${apiuri}/getMemberList`,{
+//                     headers: {
+//                       auth: localStorage.getItem("userToken"),
+//                     },
+//                   }).then(  
+//                   ({ data }) => {
+//                     dispatch(GetMemberList({ data: data }));
+//                   },
+//                   
+//                 );
+//                 }
+//                 navigate("/dashboard");
+//               } else {
+//                 alert("User Not Found! Try Again");
+//               }
               resetForm();
             }}
           >
             <Form>
+              
+            <div className="container  d-flex flex-column">
+
               <h3 className="text-center">Login</h3>
               <hr className="border border-danger border-2 opacity-50" />
-              <div className="mb-3">
-                <label htmlFor="username">User Name</label>
-                <Field type="text" name="username" className="form-control" />
+
+              <div className="col-sm-6">
+                <label htmlFor="email">Email</label>
+                <Field type="text" name="email" className="form-control" />
                 <ErrorMessage
                   className="err small"
-                  name="username"
+                  name="email"
                   component="div"
                 />
               </div>
@@ -120,6 +137,7 @@ export default function Login() {
                 <button type="submit" className="btn btn-dark form-control">
                   Submit
                 </button>
+              </div>
               </div>
             </Form>
           </Formik>

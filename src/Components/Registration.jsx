@@ -8,6 +8,7 @@ import bcryptjs from "bcryptjs";
 export default function Registration() {
   const user = useSelector((state) => state.LoginDetails.LogInUser);
 
+  console.log("Registration");
   return (
     <div className="p-4 p-md-5">
       <div className="row ">
@@ -30,31 +31,32 @@ export default function Registration() {
             onSubmit={async (values, { resetForm }) => {
               console.log("register");
 
-              const myHashPassword = await bcryptjs.hash(values.password, 3);
-
+              // const myHashPassword = await bcryptjs.hash(values.password, 3);
 
               const userDetails = {
                 username: values.username,
-                password: myHashPassword,
+                password: values.password,
                 email: values.email,
                 age: values.age,
                 role: values.role,
                 phonenumber: values.phonenumber,
                 dataofjoin: values.dataofjoin,
                 address: values.address,
-                city: values.city,
-                zipCode: values.zipCode,
               };
 
-              
-                const apiRes = await axios.post(
-                  `${apiuri}/UserRegistration`,
-                  {
-                    ...userDetails,
-                  },
-                );
-                console.log(apiRes.data);
-              
+              const dbRes = await axios.post(`${apiuri}/UserRegistration`, {
+                ...userDetails,
+              });
+              if (dbRes.data == "email already registered") {
+                alert("This email is Already Registered,Try another Email")
+              }else{
+                if (dbRes.data !== "Registration Failed") {
+                  alert("Register Success!!");
+                } else {
+                  console.log("Registration Failed!!");
+                }
+              }
+
               resetForm();
             }}
           >
@@ -137,28 +139,6 @@ export default function Registration() {
                 <ErrorMessage
                   className="err small"
                   name="address"
-                  component="div"
-                />
-              </div>
-
-              <div className="col-sm-6 mb-3">
-                <label htmlFor="city">City</label>
-                <br />
-                <Field type="text" name="city" className="form-control" />
-                <ErrorMessage
-                  className="err small"
-                  name="city"
-                  component="div"
-                />
-              </div>
-
-              <div className="mb-3 col-sm-6">
-                <label htmlFor="zipCode">Zip Code</label>
-                <br />
-                <Field type="text" name="zipCode" className="form-control" />
-                <ErrorMessage
-                  className="err small"
-                  name="zipCode"
                   component="div"
                 />
               </div>

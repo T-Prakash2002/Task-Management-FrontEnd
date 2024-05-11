@@ -11,6 +11,7 @@ import { CreateTaskValidation } from "../Validatation/validateform";
 
 
 const Task = () => {
+  console.log("Task")
 
   const user = useSelector((state) => state.LoginDetails.LogInUser);
   const IsLogIn = useSelector((state) => state.LoginDetails.IsLogIn);
@@ -65,7 +66,7 @@ const Task = () => {
           setReminderTask(data.filter((item) => item.reminder == true));
         });
     }
-  }, []);
+  }, [])
 
   let TaskList = AllTasks;
 
@@ -109,6 +110,7 @@ const Task = () => {
     <div className="container-fluid">
       <div className="row ">
         <div className="col">
+         
           <form className="d-flex" role="search">
             <input
               className="form-control me-2 border"
@@ -127,6 +129,7 @@ const Task = () => {
 
         {user.role == "Member" ? (
           <div className="col">
+            
             <button
               type="button"
               className="btn btn-outline-primary position-relative"

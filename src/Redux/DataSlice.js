@@ -1,17 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
-import { apiuri } from "../constants";
 import { encryptStorage1, encryptStorage2 } from "../Encrypt/Encrpt";
-import { act } from "react";
+
 
 const initialState = {
 
-        IsLogIn:localStorage.getItem("userToken")||"",
-        LogInUser:encryptStorage1.getItem("user")||"",
-        MemberList:encryptStorage1.getItem('MemberList')||{},
+        LogInUser:false,
+        MemberList:[],
         TaskList:[],
         Edit:{},
-        InfoTask:encryptStorage2.getItem('InfoTask'),
+        InfoTask:{},
         CurRoute:""
 }
 
@@ -23,7 +20,7 @@ const LoginSlice = createSlice({
 
                         state.IsLogIn=true
                         encryptStorage1.setItem("user",actions.payload);
-                        sessionStorage.setItem("IsLogIn",true)
+                        localStorage.setItem("IsLogIn",true)
                         state.LogInUser = actions.payload.data;
                 },
 
@@ -32,7 +29,7 @@ const LoginSlice = createSlice({
                         state.IsLogIn=false
                         encryptStorage1.removeItem('user')
                         encryptStorage1.removeItem('MemberList')
-                        sessionStorage.setItem("IsLogIn",false)
+                        localStorage.setItem("IsLogIn",false)
                         encryptStorage1.removeItem('TaskList')
                         localStorage.removeItem('userToken')
 
@@ -47,13 +44,13 @@ const LoginSlice = createSlice({
 
                         state.TaskList.push(actions.payload.data);
 
-                        console.log(state.TaskList)
+                        // console.log(state.TaskList)
 
                 },
                 GetTaskList:(state,actions)=>{
 
                         encryptStorage1.setItem('TaskList',actions.payload.data)
-                        // state.TaskList=actions.payload.data;
+                        state.TaskList=actions.payload.data;
                 },
                 EditTask:(state,actions)=>{
                         state.Edit=actions.payload;
@@ -67,7 +64,7 @@ const LoginSlice = createSlice({
 
 })
 
-export const { 
+export const {
         SignIn, 
         SignOut, 
         CreateTask,

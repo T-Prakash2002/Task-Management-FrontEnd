@@ -6,8 +6,6 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { CreateTask } from "../Redux/DataSlice";
 import "../Style/Task.css";
-import { DatePicker, TodoPicker, RangePicker } from "datepicker-xyermik"
-
 import { apiuri } from "../constants";
 
 const EditTask = () => {

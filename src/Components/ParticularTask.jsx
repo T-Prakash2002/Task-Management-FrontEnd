@@ -4,9 +4,11 @@ import { encryptStorage1, encryptStorage2 } from "../Encrypt/Encrpt";
 import { useNavigate } from "react-router-dom";
 
 const ParticularTask = () => {
+
   const taskInfo = encryptStorage2.getItem("InfoTask");
-    const navigate=useNavigate()
+  const navigate=useNavigate()
   console.log(taskInfo);
+
   return (
     <div>
       <dl className="row ms-4">

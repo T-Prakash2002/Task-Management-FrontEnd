@@ -5,12 +5,18 @@ import { useSelector, useDispatch } from "react-redux";
 import { SignOut } from "../Redux/DataSlice";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { encryptStorage1 } from "../Encrypt/Encrpt";
+
+
+
 
 const SideBar = ({ IsLogIn }) => {
-  const user = useSelector((state) => state.LoginDetails.LogInUser)||"";
+  const user = useSelector((state) => state.LoginDetails.LogInUser)?.data;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { pathname} = useLocation();
+
+  console.log("Sidebar")
 
   return (
     <>
@@ -45,7 +51,7 @@ const SideBar = ({ IsLogIn }) => {
                     <span className="mx-2">Task</span>
                   </NavLink>
                 </li>
-                {user.role == "Admin" ? (
+                {user?.role == "Admin" ? (
                   <li className="nav-item">
                     <NavLink to={"/register"} className="nav-link text-white ">
                       <i className="bi bi-person-add fs-5"></i>
@@ -60,8 +66,8 @@ const SideBar = ({ IsLogIn }) => {
               ""
             )}
 
-            {IsLogIn ? (
-              <div className="dropdown ms-auto">
+            {IsLogIn ?(
+              <div className="dropdown ms-auto dropstart">
                 <a
                   href="#"
                   className="d-flex align-items-center link-dark text-decoration-none dropdown-toggle text-white"
@@ -72,7 +78,7 @@ const SideBar = ({ IsLogIn }) => {
                   <span className="profile-img me-3 px-2 ">
                     {user?.username?.charAt(0).toUpperCase()}
                   </span>
-                  <strong className=" d-sm-inline">{user.username}</strong>
+                  <strong className=" d-sm-inline">{user?.username}</strong>
                 </a>
                 <ul
                   className="dropdown-menu text-small shadow"
@@ -122,7 +128,7 @@ const SideBar = ({ IsLogIn }) => {
         >
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="">Home</Link>
+              <Link to="" className="text-decoration-none">Home</Link>
             </li>
             {
               (pathname)?<li className="breadcrumb-item" aria-current="page">

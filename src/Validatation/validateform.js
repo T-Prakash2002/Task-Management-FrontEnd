@@ -22,15 +22,11 @@ export const Registervalidateform=Yup.object().shape({
 
     address:Yup.string().min(5, 'Address must be at least 5 characters').max(100, 'Textarea must be at most 100 characters').required('Address is required'),
 
-    city:Yup.string().min(3,'City must be at least 3 character').max(20,'City must be atmost 20 character').required("city is Required"),
-
-    zipCode:Yup.string().required().matches(/^[0-9]+$/, 'Zip Code must contain only numbers'),
 
 })
 
 export const Loginvalidateform=Yup.object().shape({
-    username:Yup.string().min(2).required('User name is required'),
-
+   email:Yup.string().email('Invalid email').required('Email is required'),
     password:Yup.string().min(4,"Password must be at least 1 characters").max(12,"Password must be atmost 12 characters").required("Password is required"),
 
     role: Yup.string().required('Role is required').notOneOf(['NotValue'],"Select Valid Option"),

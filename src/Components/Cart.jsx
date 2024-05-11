@@ -204,6 +204,8 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
                  if(user.role=="Admin"){
                    dispatch(EditTask(data));
                   navigate(`/EditTask`);
+                 }else{
+                  alert("Admin only Edit this task")
                  }
                 }}
               ></i>
@@ -227,7 +229,7 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
                       alert("Delete Failed");
                     }
                   }else{
-                    alert("Admin only delete this file")
+                    alert("Admin only delete this task")
                   }
                 }}
               ></i>

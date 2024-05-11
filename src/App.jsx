@@ -13,6 +13,7 @@ function App() {
   
   const IsLogIn=useSelector(state=>state.LoginDetails.IsLogIn);
 
+  console.log("App")
 
   return (
     <>

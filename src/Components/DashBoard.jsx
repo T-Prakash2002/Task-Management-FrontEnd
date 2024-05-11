@@ -6,6 +6,7 @@ import { GetMemberList, GetTaskList } from "../Redux/DataSlice";
 import Slider from "react-slick";
 
 const DashBoard = () => {
+  console.log("Dasboard")
   const user = useSelector((state) => state.LoginDetails.LogInUser);
 
   const MemberList = useSelector((state) => state.LoginDetails.MemberList);
@@ -15,7 +16,7 @@ const DashBoard = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (user.role === "Admin") {
+    if (user?.role === "Admin") {
       axios
         .get(`${apiuri}/getMemberList`,
                   {
@@ -41,7 +42,7 @@ const DashBoard = () => {
         setAllTasks(data);
       });
     }
-    if (user.role == "Member") {
+    if (user?.role == "Member") {
       axios
         .get(`${apiuri}/getTaskParticularMember/${user.username}`,
                   {
