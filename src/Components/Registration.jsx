@@ -3,7 +3,6 @@ import { ErrorMessage, Field, Formik, Form } from "formik";
 import { apiuri } from "../constants";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import bcryptjs from "bcryptjs";
 
 export default function Registration() {
   const user = useSelector((state) => state.LoginDetails.LogInUser);
@@ -31,7 +30,6 @@ export default function Registration() {
             onSubmit={async (values, { resetForm }) => {
               console.log("register");
 
-              // const myHashPassword = await bcryptjs.hash(values.password, 3);
 
               const userDetails = {
                 username: values.username,
@@ -44,20 +42,25 @@ export default function Registration() {
                 address: values.address,
               };
 
+              console.log(userDetails)
+
               const dbRes = await axios.post(`${apiuri}/UserRegistration`, {
                 ...userDetails,
               });
+
+              
               if (dbRes.data == "email already registered") {
                 alert("This email is Already Registered,Try another Email")
               }else{
                 if (dbRes.data !== "Registration Failed") {
                   alert("Register Success!!");
+                  resetForm();
                 } else {
                   console.log("Registration Failed!!");
                 }
               }
 
-              resetForm();
+              
             }}
           >
             <Form className="row">

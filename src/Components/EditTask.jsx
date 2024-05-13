@@ -12,6 +12,7 @@ const EditTask = () => {
 
   const [AllMembers, setAllMembers] = useState([]);
   const user = useSelector((state) => state.LoginDetails.LogInUser.username);
+  const Token = useSelector((state) => state.LoginDetails.Token);
   const IsLogIn = useSelector((state) => state.LoginDetails.IsLogIn);
   const EditData = useSelector((state) => state.LoginDetails.Edit);
   const [selectMembers, setSelectMembers] = useState([]);
@@ -21,7 +22,10 @@ const EditTask = () => {
   const handleGetMemberList = async () => {
     console.log("getmember");
     await axios
-      .get(`${apiuri}/getMemberList`)
+      .get(`${apiuri}/getMemberList`,{
+                    headers: {
+                      auth: Token,
+                    }})
       .then(({ data }) => {
         setAllMembers(data);
       })
@@ -49,12 +53,12 @@ const EditTask = () => {
         initialValues={{
           Task_Name: EditData.Task_Name,
           description: EditData.Description,
-          TaskDeadLineDate: formattedDate,
-          TaskDeadLineTime:EditData.TaskDueTime,
+          TaskDeadLineDate: EditData.TaskDueDate,
           priority: EditData.Priority,
         }}
         validationSchema={CreateTaskValidation}
         onSubmit={async (values, { resetForm }) => {
+
           console.log("create task");
 
           let tempAssignMember=[];
@@ -68,24 +72,26 @@ const EditTask = () => {
                 tempAssignMember=selectMembers;
             }
 
-            console.log(tempAssignMember);
-
           const TaskDetails = {
             assigner: user,
             Task_Name: values.Task_Name,
             description: values.description,
             TaskDeadLineDate: values.TaskDeadLineDate,
-            TaskDeadLineTime:values.TaskDeadLineTime,
             priority: values.priority,
             assigned_member: tempAssignMember,
           };
+
+          console.log(TaskDetails)
 
           if (IsLogIn) {
             const apiRes = await axios.put(
               `${apiuri}/EditTask/${EditData._id}`,
               {
                 ...TaskDetails,
-              }
+              },{
+                    headers: {
+                      auth: Token,
+                    }}
             );
 
             if (apiRes.data !=="Update Failed") {
@@ -127,19 +133,6 @@ const EditTask = () => {
               className="form-control"
             />
           </div>
-          <div className="col-12 col-md-6 mb-3">
-                    <label htmlFor="TaskDeadLineTime">DeadLine Date</label>
-                    <Field
-                      type="time"
-                      name="TaskDeadLineTime"
-                      className="form-control"
-                    />
-                    <ErrorMessage
-                      className="err small"
-                      name="TaskDeadLineTime"
-                      component="div"
-                    />
-                  </div>
 
           <div className="col-12 col-sm-6 mb-3 ">
             <label htmlFor="status" className="">

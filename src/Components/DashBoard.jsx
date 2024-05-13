@@ -8,7 +8,7 @@ import Slider from "react-slick";
 const DashBoard = () => {
   console.log("Dasboard")
   const user = useSelector((state) => state.LoginDetails.LogInUser);
-
+  const token = useSelector((state) => state.LoginDetails.Token);
   const MemberList = useSelector((state) => state.LoginDetails.MemberList);
   const [AllMembers, setAllMembers] = useState([]);
   const [AllTasks, setAllTasks] = useState([]);
@@ -21,7 +21,7 @@ const DashBoard = () => {
         .get(`${apiuri}/getMemberList`,
                   {
                     headers: {
-                      auth: localStorage.getItem("userToken"),
+                      auth: token,
                     }})
         .then(({ data }) => {
           dispatch(GetMemberList({ data: data }));
@@ -36,7 +36,7 @@ const DashBoard = () => {
       axios.get(`${apiuri}/getTaskList`,
                   {
                     headers: {
-                      auth: localStorage.getItem("userToken"),
+                      auth: token,
                     }}).then(({ data }) => {
         dispatch(GetTaskList({ data: data }));
         setAllTasks(data);
@@ -47,7 +47,7 @@ const DashBoard = () => {
         .get(`${apiuri}/getTaskParticularMember/${user.username}`,
                   {
                     headers: {
-                      auth: localStorage.getItem("userToken"),
+                      auth: token,
                     }})
         .then(({ data }) => {
           setAllTasks(data);
@@ -80,7 +80,7 @@ const DashBoard = () => {
   
   return (
     <>
-      <div className="slider-container border bg-success-subtle mt-4">
+      <div className="slider-container bg-success-subtle mt-4">
         <Slider {...settings}>
           {AllTasks.map((task, index) => {
             return (

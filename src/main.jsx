@@ -12,7 +12,8 @@ import { store } from "./Redux/store.js";
 import EditTask from "./Components/EditTask.jsx";
 import ParticularTask from "./Components/ParticularTask.jsx";
 import Index from "./Components/Index.jsx";
-
+import AddTask from "./Components/AddTask.jsx";
+import Members from "./Components/Members.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,8 +21,8 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path:'',
-        element:<Index />
+        path: "",
+        element: <Index />,
       },
       {
         path: "login",
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
         element: <Registration />,
       },
       {
+        path: "members",
+        element: <Members />,
+      },
+      {
         path: "dashboard",
         element: <DashBoard />,
       },
@@ -40,9 +45,13 @@ const router = createBrowserRouter([
         element: <Task />,
       },
       {
-          path:'particularTask',
-          element:<ParticularTask />
-        },
+        path: "addTask",
+        element: <AddTask />,
+      },
+      {
+        path: "particularTask",
+        element: <ParticularTask />,
+      },
       {
         path: "profile",
         element: <Profile />,
@@ -57,7 +66,7 @@ const router = createBrowserRouter([
 
 // store.subscribe(() => console.log(store.getState()))
 
-console.log("menu")
+console.log("menu");
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>

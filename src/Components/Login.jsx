@@ -6,8 +6,8 @@ import { useNavigate,Link } from "react-router-dom";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { SignIn, GetMemberList } from "../Redux/DataSlice";
-import bcryptjs from "bcryptjs";
 import { encryptStorage1 } from "../Encrypt/Encrpt";
+
 
 export default function Login() {
   const navigate = useNavigate();
@@ -15,78 +15,40 @@ export default function Login() {
 
   console.log("Login");
   return (
-    <div className="p-4 p-md-5">
+    <div className="loginForm">
       <div className="row">
-        <div className="col">
+        <div className="col ">
           <Formik
             initialValues={{ email: "", password: "", role: "" }}
             validationSchema={Loginvalidateform}
             onSubmit={async(values, { resetForm }) => {
-              console.log("login");
-
-
+              
               const apiResponse = await axios.get(
                 `${apiuri}/login?email=${values.email}&password=${values.password}&role=${values.role}`,
               );
 
               if(apiResponse.data !=="Login Failed"){
-                
-                dispatch(SignIn({data:apiResponse.data._doc}));
-                encryptStorage1.setItem("userToken",apiResponse.data.tokenValid)
-                //  console.log(apiResponse.data._doc)
+
+                // console.log(apiResponse.data);
+                dispatch(SignIn({data:apiResponse.data._doc,token:apiResponse.data.tokenValid}));
+                encryptStorage1.setItem("userToken",apiResponse.data.tokenValid);
                 alert("Success")
                 navigate("/dashboard");
               }else{
                 alert("User Not Found !")
               }
 
-//               const isValid = await bcryptjs.compare(
-//                 values.password,
-//                 apiResponse.data.password
-//               );
-//               console.log(apiResponse.data)
-// 
-//               if (isValid) {
-//                 
-//                 const apiResponse_User = await axios.get(
-//                 `${apiuri}/loginUser?username=${values.username}&role=${values.role}&id=${apiResponse.data._id}`,
-//               );
-// 
-//               console.log(apiResponse_User.data._doc)
-// 
-//               localStorage.setItem("userToken",apiResponse_User.data.tokenValid)
-// 
-//                 dispatch(SignIn({data:apiResponse_User.data._doc}));
-//                 console.log("Login Successfully!!!");
-// 
-//                 if(values.role=="Admin"){
-// 
-//                   await axios.get(`${apiuri}/getMemberList`,{
-//                     headers: {
-//                       auth: localStorage.getItem("userToken"),
-//                     },
-//                   }).then(  
-//                   ({ data }) => {
-//                     dispatch(GetMemberList({ data: data }));
-//                   },
-//                   
-//                 );
-//                 }
-//                 navigate("/dashboard");
-//               } else {
-//                 alert("User Not Found! Try Again");
-//               }
               resetForm();
             }}
           >
             <Form>
               
-            <div className="container  d-flex flex-column">
+            <div className="d-flex flex-column">
 
               <h3 className="text-center">Login</h3>
               <hr className="border border-danger border-2 opacity-50" />
 
-              <div className="col-sm-6">
+              <div className="mb-3">
                 <label htmlFor="email">Email</label>
                 <Field type="text" name="email" className="form-control" />
                 <ErrorMessage

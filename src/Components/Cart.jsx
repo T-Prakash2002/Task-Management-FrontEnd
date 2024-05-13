@@ -10,7 +10,12 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [status, setStatus] = useState(data.taskStatus);
+  const { LogInUser, IsLogIn, Token } = useSelector(
+    (state) => state.LoginDetails
+  );
+
   const user = useSelector((state) => state.LoginDetails.LogInUser);
+  const token = useSelector((state) => state.LoginDetails.Token);
   const info = useSelector((state) => state.LoginDetails?.InfoTask);
 
   const createdate = new Date(info?.CreatedAt);
@@ -27,36 +32,39 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
   const formattedDate = `${year}-${month}-${day}`;
 
   useEffect(() => {
-    if (user.role === "Admin") {
+    if (LogInUser.role === "Admin") {
       axios
-        .get(`${apiuri}/getMemberList`,
-                  {
-                    headers: {
-                      auth: localStorage.getItem("userToken"),
-                    }})
+        .get(`${apiuri}/getMemberList`, {
+          headers: {
+            auth: token,
+          },
+        })
         .then(({ data }) => {
           setAllMembers(data);
         })
         .catch((err) => {
-          if (err.toJSON().message === "Network Error") {
-            alert("Connection is Poor!!,Check your Connection");
-          }
+          console.log("Connection is Poor!!,Check your Connection");
         });
-      axios.get(`${apiuri}/getTaskList`,
-                  {
-                    headers: {
-                      auth: localStorage.getItem("userToken"),
-                    }}).then(({ data }) => {
-        setAllTasks(data);
-      });
-    }
-    if (user.role == "Member") {
       axios
-        .get(`${apiuri}/getTaskParticularMember/${user.username}`,
-                  {
-                    headers: {
-                      auth: localStorage.getItem("userToken"),
-                    }})
+        .get(`${apiuri}/getTaskList`, {
+          headers: {
+            auth: token,
+          },
+        })
+        .then(({ data }) => {
+          setAllTasks(data);
+        })
+        .catch((err) => {
+          console.log("Connection is Poor!!,Check your Connection");
+        });
+    }
+    if (LogInUser.role == "Member") {
+      axios
+        .get(`${apiuri}/getTaskParticularMember/${LogInUser.username}`, {
+          headers: {
+            auth: token,
+          },
+        })
         .then(({ data }) => {
           setAllTasks(data);
         });
@@ -75,24 +83,27 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
 
     if (differenceInDays == 1 || differenceInDays == 0) {
       if (data?.Priority != "Priority") {
-        let r=true
-        handleupdatePriority(data._id,r);
+        let r = true;
+        handleupdatePriority(data._id, r);
       }
     }
     return differenceInDays;
   }
 
-  async function handleupdatePriority(id,r) {
-    console.log(data.Task_Name);
+  async function handleupdatePriority(id, r) {
     await axios
-      .put(`${apiuri}/handleupdatePriority/${id}`, {
-        Priority: "Priority",
-        reminder: r,
-      },
-                  {
-                    headers: {
-                      auth: localStorage.getItem("userToken"),
-                    }})
+      .put(
+        `${apiuri}/handleupdatePriority/${id}`,
+        {
+          Priority: "Priority",
+          reminder: r,
+        },
+        {
+          headers: {
+            auth: token,
+          },
+        }
+      )
       .then(({ data }) => {
         console.log("success");
       })
@@ -109,14 +120,18 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
       remin = true;
     }
 
-    const apiRes = await axios.put(`${apiuri}/updateStatus/${id}`, {
-      taskStatus: val,
-      reminder: remin,
-    },
-                  {
-                    headers: {
-                      auth: localStorage.getItem("userToken"),
-                    }});
+    const apiRes = await axios.put(
+      `${apiuri}/updateStatus/${id}`,
+      {
+        taskStatus: val,
+        reminder: remin,
+      },
+      {
+        headers: {
+          auth: token,
+        },
+      }
+    );
 
     if (apiRes.data !== "Update Failed") {
       console.log("Successfully Update");
@@ -126,8 +141,8 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
   };
 
   return (
-    <>
-      <div className="card col-12 col-sm-6 col-md-4 col-xl-3" key={index}>
+    <div className="col-12 col-lg-2">
+      <div className="card p-3" key={index}>
         <sup>
           <i
             className={
@@ -142,11 +157,11 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
         </sup>
         <h3 className="text-center">{data.Task_Name}</h3>
         <div className="card-body">
-          <div className="card-text small d-flex justify-content-around">
+          <div>
             <strong>Assigner_Name:</strong>
             <span>{data.Assigner_Name}</span>
           </div>
-          <div className="card-text small d-flex justify-content-around">
+          {/* <div className="card-text small d-flex justify-content-around">
             <strong>Allocated_Member:</strong>
             <span className="items">
               {data.Assigned_members.map((list, index) => {
@@ -171,13 +186,13 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
             >
               {data.Priority}
             </span>
-          </div>
+          </div> */}
 
-          <div>
+          <div className="">
             <strong>Status:</strong>
             <select
               value={status}
-              className="dropdown-toggle bg-outline-warning w-50 ms-2"
+              className="dropdown-toggle bg-outline-warning ms-2"
               onChange={async (e) => {
                 console.log(e.target.value);
                 setStatus(e.target.value);
@@ -201,26 +216,26 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
               <i
                 className="bi bi-pencil-square btn"
                 onClick={() => {
-                 if(user.role=="Admin"){
-                   dispatch(EditTask(data));
-                  navigate(`/EditTask`);
-                 }else{
-                  alert("Admin only Edit this task")
-                 }
+                  if (LogInUser.role == "Admin") {
+                    dispatch(EditTask(data));
+                    navigate(`/EditTask`);
+                  } else {
+                    alert("Admin only Edit this task");
+                  }
                 }}
               ></i>
 
               <i
                 className="bi bi-trash btn"
                 onClick={async (e) => {
-                  if (user.role === "Admin") {
+                  if (LogInUser.role === "Admin") {
                     const apiRes = await axios.delete(
                       `${apiuri}/deleteParticularTask/${data._id}`,
-                  {
-                    headers: {
-                      auth: localStorage.getItem("userToken"),
-                    },
-                  }
+                      {
+                        headers: {
+                          auth: token,
+                        },
+                      }
                     );
                     if (apiRes != "Deleted Failed") {
                       alert("Deleted Success");
@@ -228,8 +243,8 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
                     } else {
                       alert("Delete Failed");
                     }
-                  }else{
-                    alert("Admin only delete this task")
+                  } else {
+                    alert("Admin only delete this task");
                   }
                 }}
               ></i>
@@ -238,14 +253,14 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
                 className="bi bi-info-circle btn"
                 onClick={() => {
                   dispatch(AboutTask(data));
-                  navigate('/particularTask')
+                  navigate("/particularTask");
                 }}
               ></i>
             </sub>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -40,12 +40,6 @@ export const CreateTaskValidation=Yup.object().shape({
 
     TaskDeadLineDate:Yup.date().required('Date is required').min(new Date(), 'Date cannot be in the past'),
 
-    TaskDeadLineTime:Yup.string()
-    .required('Time is required')
-    .test('time-format', 'Invalid time format', value => {
-      if (!value) return true; // Allow empty values
-      return /^\d{2}:\d{2}(:\d{2})?$/.test(value); // HH:mm:ss format
-    }),
 
     priority: Yup.string().required('Priority status is required').notOneOf(['Select_Priority'],"Select Valid Option")
 

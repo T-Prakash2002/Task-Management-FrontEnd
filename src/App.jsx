@@ -13,14 +13,25 @@ function App() {
   
   const IsLogIn=useSelector(state=>state.LoginDetails.IsLogIn);
 
-  console.log("App")
+  console.log(IsLogIn)
 
   return (
-    <>
+    <div className="App">
     
       <SideBar IsLogIn={IsLogIn}  />
+
       
-    </>
+    
+
+    <footer className="bg-body-tertiary text-center border ">
+          <div
+            className="text-center p-3 bg-body-secondary"
+          >
+            &copy; 2024 Copyright
+            
+          </div>
+        </footer>
+      </div>
   );
 }
 

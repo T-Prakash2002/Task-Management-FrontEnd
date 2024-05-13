@@ -1,11 +1,3 @@
-.container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-}
 
 h3 {
   color: #262626;
@@ -16,9 +8,8 @@ h3 {
 }
 
 .card {
-  display: block;
-  max-width: 350px;
-  background-color: #f2f8f94b;
+  /* max-width: 250px; */
+  background-color: #ffffffe7;
   border-radius: 4px;
   padding: 10px 15px;
   margin: 12px;
