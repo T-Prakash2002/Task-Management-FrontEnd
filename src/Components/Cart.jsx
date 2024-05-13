@@ -7,6 +7,7 @@ import axios from "axios";
 import { EditTask, AboutTask } from "../Redux/DataSlice";
 
 const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
+  
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [status, setStatus] = useState(data.taskStatus);
@@ -213,22 +214,25 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
 
           <div className="fw-bolder fs-5">
             <sub className="d-flex gap-2">
-              <i
+
+              {(user.role=="Admin" || user.editTask)?(
+                <i
                 className="bi bi-pencil-square btn"
                 onClick={() => {
-                  if (LogInUser.role == "Admin") {
                     dispatch(EditTask(data));
                     navigate(`/EditTask`);
-                  } else {
-                    alert("Admin only Edit this task");
-                  }
                 }}
               ></i>
+              ):''}
+                
+              
+              
+              {(user.role=="Admin" || user.deleteTask)?(
 
-              <i
+                <i
                 className="bi bi-trash btn"
                 onClick={async (e) => {
-                  if (LogInUser.role === "Admin") {
+                  
                     const apiRes = await axios.delete(
                       `${apiuri}/deleteParticularTask/${data._id}`,
                       {
@@ -243,19 +247,21 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
                     } else {
                       alert("Delete Failed");
                     }
-                  } else {
-                    alert("Admin only delete this task");
-                  }
+                  
                 }}
               ></i>
-
-              <i
+               ):''}
+              
+              {(user.role=="Admin" || user.viewTask)?(
+                <i
                 className="bi bi-info-circle btn"
                 onClick={() => {
                   dispatch(AboutTask(data));
                   navigate("/particularTask");
                 }}
               ></i>
+             ):''}
+              
             </sub>
           </div>
         </div>

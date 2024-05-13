@@ -1,83 +1,49 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { Outlet, Link, NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { apiuri } from "../constants";
+import { GetMemberList } from "../Redux/DataSlice";
+import Permission from "./Permission";
+
 
 const Members = () => {
-  const { MemberList } = useSelector((state) => state.LoginDetails);
+  const { LogInUser,MemberList,Token } = useSelector((state) => state.LoginDetails);
+  const dispatch = useDispatch();
 
-  const [permission,setPermission]=useState({
-
-  })
-
-  console.log(MemberList);
+  useEffect(()=>{
+    if(LogInUser.role=="Admin"){
+      axios
+        .get(`${apiuri}/getMemberList`, {
+          headers: {
+            auth: Token,
+          },
+        })
+        .then(({ data }) => {
+          dispatch(GetMemberList({ data: data }));
+        })
+        .catch((err) => {
+          if (err.toJSON().message === "Network Error") {
+            console.log("Backend Connection is poor!!!");
+          }
+        });
+    }
+  },[])
+ 
   return (
-    <div className="d-flex justify-content-center">
+    <div className="row d-flex justify-content-center">
       {MemberList?.map((member, index) => {
         return (
-          <div class="card" style={{ width: "18rem" }} key={index}>
-            <div class="card-body">
-              <h5 class="card-title">{member?.username}</h5>
-              <h6 class="card-subtitle mb-2 text-muted">{member?.email}</h6>
+          <div className="card col-6 col-md-4 col-lg-3" style={{ width: "18rem" }} key={index}>
+            <div className="card-body">
+              <h5 className="card-title">{member?.username}</h5>
+              <h6 className="card-subtitle mb-2 text-muted">{member?.email}</h6>
               <h6 className="card-text">{member?.Phonenumber}</h6>
               <h6 className="card-text">Role:{member?.role}</h6>
-              <p class="card-text">{member.Address}</p>
-              <p>
+              <p className="card-text">{member.Address}</p>
+              <div>
                 <h6>Permission:</h6>
-                <div>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="flexSwitchCheckDefault1"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="flexSwitchCheckDefault1"
-                    >
-                      ViewTask
-                    </label>
-                  </div>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="flexSwitchCheckDefault2"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="flexSwitchCheckDefault2"
-                    >
-                      Create Task
-                    </label>
-                  </div>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="flexSwitchCheckDefault3"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="flexSwitchCheckDefault3"
-                    >
-                      EditTask
-                    </label>
-                  </div>
-                  <div class="form-check form-switch">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="flexSwitchCheckDefault4"
-                    />
-                    <label
-                      class="form-check-label"
-                      for="flexSwitchCheckDefault4"
-                    >
-                      DeleteTask
-                    </label>
-                  </div>
-                </div>
-              </p>
+                <Permission member={member}/>
+              </div>
             </div>
           </div>
         );

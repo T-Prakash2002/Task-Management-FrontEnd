@@ -44,16 +44,7 @@ const Profile = () => {
         <dd className="col-sm-9">
           {user?.Address}
         </dd>
-        <dt className="col-sm-3">City:</dt>
-        <dd className="col-sm-9">
-          {user?.City}
-        </dd>
-        <dt className="col-sm-3">Zip Code:</dt>
-        <dd className="col-sm-9">
-          {user?.ZipCode}
-        </dd>
-
-
+        
       </dl>
     </div>
   );

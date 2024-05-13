@@ -23,8 +23,6 @@ export default function Registration() {
               phonenumber: "",
               dataofjoin: "",
               address: "",
-              city: "",
-              zipCode: "",
             }}
             validationSchema={Registervalidateform}
             onSubmit={async (values, { resetForm }) => {

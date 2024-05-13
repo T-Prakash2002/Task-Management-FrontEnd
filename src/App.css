@@ -4,10 +4,10 @@
     border-radius: 6px;
 }
 .loginForm{
-    max-width: 1700px;
     display: grid;
     place-content: center;
 }
+
 .navbar {
   margin: 0 auto;
   padding: 1rem;
