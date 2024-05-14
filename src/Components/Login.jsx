@@ -6,20 +6,20 @@ import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { SignIn, GetMemberList,GetTaskList,LoadingTrue,LoadingFalse } from "../Redux/DataSlice";
 import { encryptStorage1 } from "../Encrypt/Encrpt";
-// import Loading from '../Loading'
+import Loading from '../Loading'
 
 
 export default function Login() {
-  // const {IsLoading} =useSelector(state=>state.LoginDetails)
+  const {IsLoading} =useSelector(state=>state.LoginDetails)
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   return (
 
     <div className="loginForm">
-      {/* {
-              IsLoading?<Loading />:""
-      } */}
+      {
+            IsLoading?<Loading />:""
+      }
       <div className="row">
         <div className="col ">
           <Formik

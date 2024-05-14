@@ -5,10 +5,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { SignOut } from "../Redux/DataSlice";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import Loading from '../Loading'
+
+
+
 const SideBar = ({ IsLogIn }) => {
   const user = useSelector((state) => state.LoginDetails.LogInUser);
-  const {IsLoading} = useSelector((state) => state.LoginDetails);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -146,12 +147,6 @@ const SideBar = ({ IsLogIn }) => {
         </nav>
       </div>
 
-    <div className="row">
-            {
-        (IsLogIn)?
-          IsLoading?<Loading />:"":""
-      }
-    </div>
 
       {/* Outlet */}
       <div className="row d-flex justify-content-center">

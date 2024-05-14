@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { apiuri } from "../constants";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { GetMemberList, GetTaskList,LoadingTrue,LoadingFalse } from "../Redux/DataSlice";
+import { GetMemberList, GetTaskList } from "../Redux/DataSlice";
 import Slider from "react-slick";
 
 
@@ -15,6 +15,7 @@ const DashBoard = () => {
   const [AllTasks, setAllTasks] = useState([]);
 
   const dispatch = useDispatch();
+
 
   useEffect(() => {
     if (user?.role === "Admin") {
@@ -41,6 +42,9 @@ const DashBoard = () => {
                     }}).then(({ data }) => {
         dispatch(GetTaskList({ data: data }));
         setAllTasks(data);
+        if(data.length==0){
+            dispatch(LoadingFalse())
+          }
       });
     }
     if (user?.role == "Member") {
@@ -53,6 +57,9 @@ const DashBoard = () => {
         .then(({ data }) => {
           setAllTasks(data);
           dispatch(GetTaskList({ data: data }));
+          if(data.length==0){
+            dispatch(LoadingFalse())
+          }
         });
     }
   }, []);
@@ -79,10 +86,10 @@ const DashBoard = () => {
     return count.length;
   }
 
-  (AllTasks?.length<1)?dispatch(LoadingTrue()):dispatch(LoadingFalse())
+  
   
   return (
-    <>      
+    <>
       <div className="slider-container bg-success-subtle mt-4">
         <Slider {...settings}>
           {AllTasks.map((task, index) => {
