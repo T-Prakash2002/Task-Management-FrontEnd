@@ -18,9 +18,9 @@ const SideBar = ({ IsLogIn }) => {
       <div>
         <nav className="navbar navbar-expand-md navbar-light bg-body-tertiary border">
           <div className="container-fluid">
-            <a className="navbar-brand" href="#">
+            <Link className="navbar-brand" to="/">
               <i className=" text-muted fs-6">Task Management</i>
-            </a>
+            </Link>
             <button
               className="navbar-toggler btn"
               type="button"

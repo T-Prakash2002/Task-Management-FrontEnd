@@ -14,7 +14,7 @@ export default function Registration() {
   return (
     <div className="p-4 p-md-5">
       <div className="row ">
-        <div className="col">
+        <div className="col ">
           <Formik
             initialValues={{
               username: "",
