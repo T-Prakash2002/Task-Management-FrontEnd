@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from "react-redux";
 export default function Registration() {
   const user = useSelector((state) => state.LoginDetails.LogInUser);
 
-  console.log("Registration");
   return (
     <div className="p-4 p-md-5">
       <div className="row ">
@@ -26,8 +25,6 @@ export default function Registration() {
             }}
             validationSchema={Registervalidateform}
             onSubmit={async (values, { resetForm }) => {
-              console.log("register");
-
 
               const userDetails = {
                 username: values.username,
@@ -39,8 +36,6 @@ export default function Registration() {
                 dataofjoin: values.dataofjoin,
                 address: values.address,
               };
-
-              console.log(userDetails)
 
               const dbRes = await axios.post(`${apiuri}/UserRegistration`, {
                 ...userDetails,

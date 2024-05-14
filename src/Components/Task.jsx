@@ -8,16 +8,12 @@ import { GetMemberList, GetTaskList } from "../Redux/DataSlice";
 
 
 const Task = () => {
-  console.log("Task");
 
   const { LogInUser, IsLogIn, TaskList, Token } = useSelector(
     (state) => state.LoginDetails
   );
-  // const IsLogIn = useSelector((state) => state.LoginDetails.IsLogIn);
-  // const TaskLis = useSelector((state) => state.LoginDetails.TaskList);
 
   const [searchWords, setSearchWords] = useState();
-  const [selectMembers, setSelectMembers] = useState([]);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -25,7 +21,6 @@ const Task = () => {
   const [AllTasks, setAllTasks] = useState(TaskList);
   let [filterOptions, setFilterOptions] = useState("All");
   const [reminderTask, setReminderTask] = useState([]);
-  const [status, setStatus] = useState();
 
 
   useEffect(() => {
@@ -75,34 +70,6 @@ const Task = () => {
     }
   }, []);
 
-    const handleChangeStatus = async (val, id) => {
-    let remin = false;
-    if (val == "Completed") {
-      remin = false;
-    } else {
-      remin = true;
-    }
-
-    const apiRes = await axios.put(
-      `${apiuri}/updateStatus/${id}`,
-      {
-        taskStatus: val,
-        reminder: remin,
-      },
-      {
-        headers: {
-          auth: Token,
-        },
-      }
-    );
-
-    if (apiRes.data !== "Update Failed") {
-      console.log("Successfully Update");
-    } else {
-      console.log("Update Failed");
-    }
-  };
-
   let TaskListData = AllTasks;
 
   if (searchWords?.length) {
@@ -126,11 +93,11 @@ const Task = () => {
 
   return (
     <div className="container-fluid">
-      <div className="row">
-        <div className="col ms-4">
+      <div className="row ms-4">
+        <div className="col">
           <form className="d-flex" role="search">
             <input
-              className="form-control me-2 "
+              className="form-control me-2"
               type="search"
               placeholder="Search Task Name"
               aria-label="Search"
@@ -143,9 +110,10 @@ const Task = () => {
         </div>
 
         {/* Reminder Task Button */}
-
+        <div className="col">
         {LogInUser.role == "Member" ? (
-          <div className="col">
+          <>
+          
             <button
               type="button"
               className="btn btn-outline-primary position-relative"
@@ -222,14 +190,14 @@ const Task = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </>
         ) : (
           ""
-        )}
+        )}</div>
       </div>
 
       <div className="row my-5 d-flex justify-content-end ">
-        {LogInUser.role == "Admin" ? (
+        {LogInUser.role == "Admin" || LogInUser?.createTask ? (
           <div className="col-sm-7 col-6">
             <button
               type="button"

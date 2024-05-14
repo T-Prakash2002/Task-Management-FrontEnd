@@ -3,9 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import { CreateTaskValidation } from "../Validatation/validateform";
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-import { CreateTask } from "../Redux/DataSlice";
-import "../Style/Task.css";
+import { useSelector } from "react-redux";
 import { apiuri } from "../constants";
 
 const EditTask = () => {
@@ -20,7 +18,7 @@ const EditTask = () => {
   const navigate = useNavigate();
 
   const handleGetMemberList = async () => {
-    console.log("getmember");
+
     await axios
       .get(`${apiuri}/getMemberList`,{
                     headers: {
@@ -41,30 +39,22 @@ const EditTask = () => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  const seconds = String(date.getSeconds()).padStart(2, "0");
 
   const formattedDate = `${year}-${month}-${day}`;
 
   return (
-    <div className="Task p-3 p-lg-5 w-75">
+    <div className="border p-3 p-lg-5 w-75">
       <Formik
         initialValues={{
           Task_Name: EditData.Task_Name,
           description: EditData.Description,
-          TaskDeadLineDate: EditData.TaskDueDate,
+          TaskDeadLineDate: formattedDate,
           priority: EditData.Priority,
         }}
         validationSchema={CreateTaskValidation}
         onSubmit={async (values, { resetForm }) => {
 
-          console.log("create task");
-
           let tempAssignMember=[];
-
-          console.log(selectMembers.length);
-          console.log(EditData.Assigned_members);
 
             if(selectMembers.length<1){
                 tempAssignMember=EditData.Assigned_members;
@@ -81,7 +71,6 @@ const EditTask = () => {
             assigned_member: tempAssignMember,
           };
 
-          console.log(TaskDetails)
 
           if (IsLogIn) {
             const apiRes = await axios.put(
@@ -103,7 +92,7 @@ const EditTask = () => {
           }
         }}
       >
-        <Form className="row ">
+        <Form className="row">
           <h3 className="text-center">Edit Task</h3>
           <div className="mb-3 col-12">
             <label htmlFor="Task_Name">Task Name</label>

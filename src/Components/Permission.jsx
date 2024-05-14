@@ -45,11 +45,7 @@ const Permission = ({ member }) => {
                 },
               }
             );
-            // if(apiRes.data !=="Failed to Update!"){
-            //   console.log("Successfully Update")
-            // }else{
-            //   console.log("Failed to Update")
-            // }
+
           }}
         />
         <label className="form-check-label" htmlFor={member?.email + "view"}>

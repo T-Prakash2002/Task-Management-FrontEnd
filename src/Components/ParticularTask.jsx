@@ -7,7 +7,6 @@ const ParticularTask = () => {
 
   const taskInfo = encryptStorage2.getItem("InfoTask");
   const navigate=useNavigate()
-  console.log(taskInfo);
 
   return (
     <div>

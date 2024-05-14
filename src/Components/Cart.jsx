@@ -19,18 +19,6 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
   const token = useSelector((state) => state.LoginDetails.Token);
   const info = useSelector((state) => state.LoginDetails?.InfoTask);
 
-  const createdate = new Date(info?.CreatedAt);
-  const createyear = createdate.getFullYear();
-  const createmonth = String(createdate.getMonth() + 1).padStart(2, "0");
-  const createday = String(createdate.getDate()).padStart(2, "0");
-  const createformatedDate = `${createyear}-${createmonth}-${createday}`;
-
-  const date = new Date(info?.TaskDueDate);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-
-  const formattedDate = `${year}-${month}-${day}`;
 
   useEffect(() => {
     if (LogInUser.role === "Admin") {
@@ -77,9 +65,6 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
     const startDate = Date.now();
     const timeDifferenceMS = endDate - startDate;
 
-    const timeDifferenceSecs = Math.floor(timeDifferenceMS / 1000);
-    const timeDifferenceMins = Math.floor(timeDifferenceMS / 60000);
-    const timeDifferenceHours = Math.floor(timeDifferenceMS / 3600000);
     const differenceInDays = Math.floor(timeDifferenceMS / 86400000);
 
     if (differenceInDays == 1 || differenceInDays == 0) {
@@ -88,7 +73,10 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
         handleupdatePriority(data._id, r);
       }
     }
-    return differenceInDays;
+    if(differenceInDays <0){
+      return "Overdue Task"
+    }
+    return (differenceInDays+" days pending");
   }
 
   async function handleupdatePriority(id, r) {
@@ -142,7 +130,7 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
   };
 
   return (
-    <div className="col-12 col-lg-2">
+    <div className="col-12 col-lg-6">
       <div className="card p-3" key={index}>
         <sup>
           <i
@@ -154,10 +142,10 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
                 : "text-primary fw-bold bi bi-circle-fill mx-2"
             }
           ></i>
-          {differenceInDay(data)} days pending
+          {differenceInDay(data)}
         </sup>
         <h3 className="text-center">{data.Task_Name}</h3>
-        <div className="card-body">
+        <div className="">
           <div>
             <strong>Assigner_Name:</strong>
             <span>{data.Assigner_Name}</span>
@@ -195,7 +183,6 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
               value={status}
               className="dropdown-toggle bg-outline-warning ms-2"
               onChange={async (e) => {
-                console.log(e.target.value);
                 setStatus(e.target.value);
                 handleChangeStatus(e.target.value, data._id);
               }}

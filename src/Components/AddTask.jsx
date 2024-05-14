@@ -14,7 +14,6 @@ const AddTask = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // console.log(Token)
   return (
     <>
       <Formik
@@ -27,7 +26,6 @@ const AddTask = () => {
         }}
         validationSchema={CreateTaskValidation}
         onSubmit={async (values, { resetForm }) => {
-          console.log("register");
 
           const TaskDetails = {
             assigner: LogInUser.username,
@@ -39,7 +37,6 @@ const AddTask = () => {
             assigned_member: selectMembers,
           };
 
-          console.log(TaskDetails);
 
             await axios.post(
               `${apiuri}/createTask`,

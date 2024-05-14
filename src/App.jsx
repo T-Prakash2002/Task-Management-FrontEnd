@@ -13,8 +13,6 @@ function App() {
   
   const IsLogIn=useSelector(state=>state.LoginDetails.IsLogIn);
 
-  console.log(IsLogIn)
-
   return (
     <div className="App">
     
@@ -23,14 +21,14 @@ function App() {
       
     
 
-    <footer className="bg-body-tertiary text-center border ">
+    {/* <footer className="bg-body-tertiary text-center border ">
           <div
             className="text-center p-3 bg-body-secondary"
           >
             &copy; 2024 Copyright
             
           </div>
-        </footer>
+        </footer> */}
       </div>
   );
 }

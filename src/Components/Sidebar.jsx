@@ -13,13 +13,9 @@ const SideBar = ({ IsLogIn }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  // console.log(user);
-
-  console.log("Sidebar");
-
   return (
     <>
-      <div id="Navbar">
+      <div>
         <nav className="navbar navbar-expand-md navbar-light bg-body-tertiary border">
           <div className="container-fluid">
             <a className="navbar-brand" href="#">
@@ -131,7 +127,7 @@ const SideBar = ({ IsLogIn }) => {
         </nav>
       </div>
 
-      <div className="row ms-3">
+      <div className="row ms-3 mt-2">
         <nav className="breadcrumb ms-5" aria-label="breadcrumb">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
@@ -151,13 +147,20 @@ const SideBar = ({ IsLogIn }) => {
       </div>
 
       {/* Outlet */}
-      <div className="row">
+      <div className="row d-flex justify-content-center">
         
           <Outlet />
         
       </div>
       
-        
+        <footer className="bg-body-tertiary text-center border ">
+          <div
+            className="text-center p-3 bg-body-secondary"
+          >
+            &copy; 2024 Copyright
+            
+          </div>
+        </footer>
      
     </>
   );

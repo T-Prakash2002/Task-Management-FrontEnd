@@ -6,7 +6,6 @@ import { GetMemberList, GetTaskList } from "../Redux/DataSlice";
 import Slider from "react-slick";
 
 const DashBoard = () => {
-  console.log("Dasboard")
   const user = useSelector((state) => state.LoginDetails.LogInUser);
   const token = useSelector((state) => state.LoginDetails.Token);
   const MemberList = useSelector((state) => state.LoginDetails.MemberList);

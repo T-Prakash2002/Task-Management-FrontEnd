@@ -6,8 +6,6 @@ const Profile = () => {
 
     const user =encryptStorage1.getItem('user');
     
-    console.log("Profile");
-
   return (
     <div>
       <dl className="row m-3">
@@ -41,6 +39,10 @@ const Profile = () => {
           {user?.Date_of_Join?.slice(0,10)}
         </dd>
         <dt className="col-sm-3">Address:</dt>
+        <dd className="col-sm-9">
+          {user?.Address}
+        </dd>
+        <dt className="col-sm-3">Permissions:</dt>
         <dd className="col-sm-9">
           {user?.Address}
         </dd>

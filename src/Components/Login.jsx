@@ -13,7 +13,6 @@ export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  console.log("Login");
   return (
     <div className="loginForm">
       <div className="row">
@@ -29,7 +28,6 @@ export default function Login() {
 
               if(apiResponse.data !=="Login Failed"){
 
-                // console.log(apiResponse.data);
                 dispatch(SignIn({data:apiResponse.data._doc,token:apiResponse.data.tokenValid}));
                 encryptStorage1.setItem("userToken",apiResponse.data.tokenValid);
                 alert("Success")
