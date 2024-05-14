@@ -5,6 +5,7 @@ import axios from "axios";
 import { GetMemberList, GetTaskList } from "../Redux/DataSlice";
 import Slider from "react-slick";
 
+
 const DashBoard = () => {
   const user = useSelector((state) => state.LoginDetails.LogInUser);
   const token = useSelector((state) => state.LoginDetails.Token);
@@ -13,6 +14,8 @@ const DashBoard = () => {
   const [AllTasks, setAllTasks] = useState([]);
 
   const dispatch = useDispatch();
+
+  console.log(import.meta.env)
 
   useEffect(() => {
     if (user?.role === "Admin") {

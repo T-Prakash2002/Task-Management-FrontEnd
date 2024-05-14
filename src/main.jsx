@@ -64,9 +64,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-// store.subscribe(() => console.log(store.getState()))
-
-console.log("menu");
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
