@@ -47,8 +47,6 @@ const ParticularTask = () => {
         <dd className="col-sm-9">{taskInfo?.CreatedAt.slice(0, 10)}</dd>
         <dt className="col-sm-3">Deadline Date:</dt>
         <dd className="col-sm-9">{taskInfo?.TaskDueDate.slice(0, 10)}</dd>
-        <dt className="col-sm-3">Task Deadline Time:</dt>
-        <dd className="col-sm-9">{taskInfo?.TaskDueTime}</dd>
         <dt className="col-sm-3">Task Status:</dt>
         <dd className="col-sm-9">{taskInfo?.taskStatus}</dd>
         

@@ -42,11 +42,7 @@ const Profile = () => {
         <dd className="col-sm-9">
           {user?.Address}
         </dd>
-        <dt className="col-sm-3">Permissions:</dt>
-        <dd className="col-sm-9">
-          {user?.Address}
-        </dd>
-        
+
       </dl>
     </div>
   );
