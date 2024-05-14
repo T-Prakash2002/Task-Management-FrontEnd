@@ -34,13 +34,9 @@ const LoginSlice = createSlice({
                         state.IsLogIn=false
                         state.LogInUser={}
                         encryptStorage1.removeItem('user')
-                        // encryptStorage1.removeItem('MemberList')
-                        // localStorage.setItem("IsLogIn",false)
-                        // encryptStorage1.removeItem('TaskList')
+                        encryptStorage1.removeItem('MemberList')
                         encryptStorage1.setItem('userToken','')
                         localStorage.removeItem("IsLogIn");
-
-
                 },
                 GetMemberList: (state,actions) => {
 
