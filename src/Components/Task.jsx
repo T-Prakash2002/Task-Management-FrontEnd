@@ -225,13 +225,13 @@ const Task = () => {
               All
             </option>
             <option
-              className="dropdown-item text-success bi bi-circle-fill"
+              className="dropdown-item text-primary bi bi-circle-fill"
               value="Normal"
             >
               Normal
             </option>
             <option
-              className="dropdown-item text-primary bi bi-circle-fill"
+              className="dropdown-item text-success bi bi-circle-fill"
               value="Important"
             >
               Important

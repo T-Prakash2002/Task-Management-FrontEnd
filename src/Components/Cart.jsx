@@ -231,7 +231,6 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
                     );
                     if (apiRes != "Deleted Failed") {
                       alert("Deleted Success");
-                      window.location.reload();
                     } else {
                       alert("Delete Failed");
                     }
