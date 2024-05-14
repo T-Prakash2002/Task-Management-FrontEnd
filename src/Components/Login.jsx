@@ -3,23 +3,32 @@ import { ErrorMessage, Field, Formik, Form } from "formik";
 import { apiuri } from "../constants";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
-import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { SignIn, GetMemberList } from "../Redux/DataSlice";
+import { SignIn, GetMemberList,GetTaskList,LoadingTrue,LoadingFalse } from "../Redux/DataSlice";
 import { encryptStorage1 } from "../Encrypt/Encrpt";
+// import Loading from '../Loading'
+
 
 export default function Login() {
+  // const {IsLoading} =useSelector(state=>state.LoginDetails)
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   return (
+
     <div className="loginForm">
+      {/* {
+              IsLoading?<Loading />:""
+      } */}
       <div className="row">
         <div className="col ">
           <Formik
             initialValues={{ email: "", password: "", role: "" }}
             validationSchema={Loginvalidateform}
             onSubmit={async (values, { resetForm }) => {
+
+              dispatch(LoadingTrue())
+
               const apiResponse = await axios.get(
                 `${apiuri}/login?email=${values.email}&password=${values.password}&role=${values.role}`
               );
@@ -35,9 +44,13 @@ export default function Login() {
                   "userToken",
                   apiResponse.data.tokenValid
                 );
+
+                dispatch(LoadingFalse())
+
                 alert("Success");
 
-                if (values.role?.role === "Admin") {
+
+                if (values?.role === "Admin") {
                   axios
                     .get(`${apiuri}/getMemberList`, {
                       headers: {
@@ -46,10 +59,9 @@ export default function Login() {
                     })
                     .then(({ data }) => {
                       dispatch(GetMemberList({ data: data }));
-                      setAllMembers(data);
                     })
                     .catch((err) => {
-                      if (err.toJSON().message === "Network Error") {
+                      if (err?.toJSON().message === "Network Error") {
                         console.log("Backend Connection is poor!!!");
                       }
                     });
@@ -62,28 +74,30 @@ export default function Login() {
                     })
                     .then(({ data }) => {
                       dispatch(GetTaskList({ data: data }));
-                      setAllTasks(data);
                     });
                 }
-                if (values.role?.role == "Member") {
+                if (values?.role == "Member") {
                   axios
-                    .get(`${apiuri}/getTaskParticularMember/${user.username}`, {
+                    .get(`${apiuri}/getTaskParticularMember/${values?.username}`, {
                       headers: {
                         auth: apiResponse.data.tokenValid,
                       },
                     })
                     .then(({ data }) => {
-                      setAllTasks(data);
                       dispatch(GetTaskList({ data: data }));
                     });
                 }
                 navigate("/");
+
               } else {
                 alert("User Not Found !");
               }
               resetForm();
             }}
+
+
           >
+            
             <Form className="formLogin">
               <div className="d-flex flex-column">
                 <h3 className="text-center">Login</h3>

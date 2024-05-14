@@ -2,14 +2,15 @@ import React, { useEffect, useState } from "react";
 import { apiuri } from "../constants";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { GetMemberList, GetTaskList } from "../Redux/DataSlice";
+import { GetMemberList, GetTaskList,LoadingTrue,LoadingFalse } from "../Redux/DataSlice";
 import Slider from "react-slick";
+
 
 
 const DashBoard = () => {
   const user = useSelector((state) => state.LoginDetails.LogInUser);
   const token = useSelector((state) => state.LoginDetails.Token);
-  const MemberList = useSelector((state) => state.LoginDetails.MemberList);
+  const {IsLoading} = useSelector((state) => state.LoginDetails);
   const [AllMembers, setAllMembers] = useState([]);
   const [AllTasks, setAllTasks] = useState([]);
 
@@ -77,9 +78,11 @@ const DashBoard = () => {
 
     return count.length;
   }
+
+  (AllTasks?.length<1)?dispatch(LoadingTrue()):dispatch(LoadingFalse())
   
   return (
-    <>
+    <>      
       <div className="slider-container bg-success-subtle mt-4">
         <Slider {...settings}>
           {AllTasks.map((task, index) => {

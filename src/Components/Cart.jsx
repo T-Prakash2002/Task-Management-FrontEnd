@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { apiuri } from "../constants";
 import axios from "axios";
-import { EditTask, AboutTask } from "../Redux/DataSlice";
+import { EditTask, AboutTask,deleteTask } from "../Redux/DataSlice";
 
 const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
   
@@ -202,7 +202,7 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
           <div className="fw-bolder fs-5">
             <sub className="d-flex gap-2">
 
-              {(user.role=="Admin" || user.editTask)?(
+              {(LogInUser.role=="Admin" || LogInUser.editTask)?(
                 <i
                 className="bi bi-pencil-square btn"
                 title="Edit"
@@ -214,7 +214,7 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
               ):''}
                 
               
-              {(user.role=="Admin" || user.deleteTask)?(
+              {(LogInUser.role=="Admin" || LogInUser.deleteTask)?(
 
                 <i
                 className="bi bi-trash btn"
@@ -230,16 +230,17 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
                       }
                     );
                     if (apiRes != "Deleted Failed") {
+                      
+                      dispatch(deleteTask({id:data._id}))
                       alert("Deleted Success");
                     } else {
                       alert("Delete Failed");
                     }
-                  
                 }}
               ></i>
                ):''}
               
-              {(user.role=="Admin" || user.viewTask)?(
+              {(LogInUser.role=="Admin" || LogInUser.viewTask)?(
                 <i
                 className="bi bi-info-circle btn"
                 title="About"

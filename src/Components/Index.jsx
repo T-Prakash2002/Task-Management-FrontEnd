@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 const Index = () => {
   return (
     <>
+    
       <div className="d-flex justify-content-center ">
         <div className="row">
           <h1 className="text-center p-2">Welcome To Our Page</h1>

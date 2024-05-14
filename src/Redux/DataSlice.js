@@ -11,7 +11,9 @@ const initialState = {
         TaskList:[],
         Edit:{},
         InfoTask:{},
-        CurRoute:""
+        CurRoute:"",
+        IsLoading:false
+        
 }
 
 const LoginSlice = createSlice({
@@ -37,6 +39,8 @@ const LoginSlice = createSlice({
                         encryptStorage1.removeItem('MemberList')
                         encryptStorage1.setItem('userToken','')
                         localStorage.removeItem("IsLogIn");
+                        encryptStorage2.removeItem("EditTask")
+                        encryptStorage2.removeItem("InfoTask")
                 },
                 GetMemberList: (state,actions) => {
 
@@ -63,9 +67,18 @@ const LoginSlice = createSlice({
                         encryptStorage2.setItem('EditTask',actions.payload)
 
                 },
+                deleteTask:(state,actions)=>{
+                  state.TaskList=state.TaskList.filter(li=>li._id != actions.payload.id)
+                },
                 AboutTask:(state,actions)=>{
                         state.InfoTask=actions.payload;
                         encryptStorage2.setItem('InfoTask',actions.payload)
+                },
+                LoadingTrue:(state,actions)=>{
+                        state.IsLoading=true
+                },
+                LoadingFalse:(state,actions)=>{
+                        state.IsLoading=false
                 },
         }
 
@@ -79,7 +92,9 @@ export const {
         GetTaskList ,
         EditTask,
         AboutTask,
-        
+        deleteTask,
+        LoadingTrue,
+        LoadingFalse
         } = LoginSlice.actions
 
 

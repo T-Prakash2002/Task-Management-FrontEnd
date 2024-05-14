@@ -247,7 +247,7 @@ const Task = () => {
       </div>
 
       <div className="row d-flex justify-content-center">
-        {TaskListData.map((task, index) => {
+        {TaskListData?.map((task, index) => {
           return (
             <Cart
               key={index}
