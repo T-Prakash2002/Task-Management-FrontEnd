@@ -2,10 +2,14 @@ import { Registervalidateform } from "../Validatation/validateform";
 import { ErrorMessage, Field, Formik, Form } from "formik";
 import { apiuri } from "../constants";
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+  
+
 
 export default function Registration() {
   const user = useSelector((state) => state.LoginDetails.LogInUser);
+  const navigate = useNavigate();
 
   return (
     <div className="p-4 p-md-5">
@@ -48,6 +52,7 @@ export default function Registration() {
                 if (dbRes.data !== "Registration Failed") {
                   alert("Register Success!!");
                   resetForm();
+                  navigate("/");
                 } else {
                   console.log("Registration Failed!!");
                 }

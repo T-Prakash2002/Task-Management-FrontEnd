@@ -31,7 +31,7 @@ export default function Login() {
                 dispatch(SignIn({data:apiResponse.data._doc,token:apiResponse.data.tokenValid}));
                 encryptStorage1.setItem("userToken",apiResponse.data.tokenValid);
                 alert("Success")
-                navigate("/dashboard");
+                navigate("/");
               }else{
                 alert("User Not Found !")
               }

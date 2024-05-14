@@ -130,7 +130,7 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
   };
 
   return (
-    <div className="col-12 col-lg-6">
+    <div className="col-12 col-sm-6 col-md-4 col-lg-3">
       <div className="card p-3" key={index}>
         <sup>
           <i
@@ -205,6 +205,7 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
               {(user.role=="Admin" || user.editTask)?(
                 <i
                 className="bi bi-pencil-square btn"
+                title="Edit"
                 onClick={() => {
                     dispatch(EditTask(data));
                     navigate(`/EditTask`);
@@ -213,11 +214,11 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
               ):''}
                 
               
-              
               {(user.role=="Admin" || user.deleteTask)?(
 
                 <i
                 className="bi bi-trash btn"
+                title="Delete"
                 onClick={async (e) => {
                   
                     const apiRes = await axios.delete(
@@ -242,6 +243,7 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
               {(user.role=="Admin" || user.viewTask)?(
                 <i
                 className="bi bi-info-circle btn"
+                title="About"
                 onClick={() => {
                   dispatch(AboutTask(data));
                   navigate("/particularTask");
