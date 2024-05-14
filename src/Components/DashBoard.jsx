@@ -10,7 +10,6 @@ import Slider from "react-slick";
 const DashBoard = () => {
   const user = useSelector((state) => state.LoginDetails.LogInUser);
   const token = useSelector((state) => state.LoginDetails.Token);
-  const {IsLoading} = useSelector((state) => state.LoginDetails);
   const [AllMembers, setAllMembers] = useState([]);
   const [AllTasks, setAllTasks] = useState([]);
 
