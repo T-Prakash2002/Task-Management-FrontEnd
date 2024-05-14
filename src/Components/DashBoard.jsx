@@ -15,8 +15,6 @@ const DashBoard = () => {
 
   const dispatch = useDispatch();
 
-  console.log(import.meta.env)
-
   useEffect(() => {
     if (user?.role === "Admin") {
       axios
