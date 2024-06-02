@@ -52,11 +52,8 @@ useEffect(() => {
                       auth: token,
                     }})
         .then(({ data }) => {
-                    console.log(data)
-
           setAllTasks(data);
           dispatch(GetTaskList({ data: data }));
-          
         });
     }
   }, []);
