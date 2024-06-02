@@ -63,61 +63,7 @@ useEffect(() => {
           }
         });
     }
-    console.log("hii")
   }, []);
-              
-
-
-// if (user?.role === "Admin") {
-//       axios
-//         .get(`${apiuri}/getMemberList`,
-//                   {
-//                     headers: {
-//                       auth: token,
-//                     }})
-//         .then(({ data }) => {
-//           dispatch(GetMemberList({ data: data }));
-//           setAllMembers(data);
-//         })
-//         .catch((err) => {
-//           if (err.toJSON().message === "Network Error") {
-//             console.log("Backend Connection is poor!!!");
-//           }
-//         });
-// 
-//       axios.get(`${apiuri}/getTaskList`,
-//                   {
-//                     headers: {
-//                       auth: token,
-//                     }}).then(({ data }) => {
-//         dispatch(GetTaskList({ data: data }));
-//         setAllTasks(data);
-//         if(data.length==0){
-//             dispatch(LoadingFalse())
-//           }
-//           console.log(data)
-//       });
-//     }
-//     if (user?.role == "Member") {
-//       axios
-//         .get(`${apiuri}/getTaskParticularMember/${user.username}`,
-//                   {
-//                     headers: {
-//                       auth: token,
-//                     }})
-//         .then(({ data }) => {
-// 
-//           console.log(data)
-// 
-// 
-//           setAllTasks(data);
-//           dispatch(GetTaskList({ data: data }));
-//           if(data.length==0){
-//             dispatch(LoadingFalse())
-//           }
-//         });
-//     }
-
 
 
   const settings = {
