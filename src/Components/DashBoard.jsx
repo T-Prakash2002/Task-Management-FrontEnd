@@ -8,21 +8,20 @@ import Slider from "react-slick";
 
 
 const DashBoard = () => {
-  const user = useSelector((state) => state.LoginDetails.LogInUser);
-  const token = useSelector((state) => state.LoginDetails.Token);
-  const [AllMembers, setAllMembers] = useState([]);
-  const [AllTasks, setAllTasks] = useState([]);
+  const {LogInUser,MemberList,TaskList,Token} = useSelector((state) => state.LoginDetails);
 
+  const [AllMembers, setAllMembers] = useState(MemberList);
+  const [AllTasks, setAllTasks] = useState(TaskList);
   const dispatch = useDispatch();
 
 
 useEffect(() => {
-    if (user?.role === "Admin") {
+    if (LogInUser?.role === "Admin") {
       axios
         .get(`${apiuri}/getMemberList`,
                   {
                     headers: {
-                      auth: token,
+                      auth: Token,
                     }})
         .then(({ data }) => {
           dispatch(GetMemberList({ data: data }));
@@ -37,19 +36,19 @@ useEffect(() => {
       axios.get(`${apiuri}/getTaskList`,
                   {
                     headers: {
-                      auth: token,
+                      auth: Token,
                     }}).then(({ data }) => {
         dispatch(GetTaskList({ data: data }));
         setAllTasks(data);
         
       });
     }
-    if (user?.role == "Member") {
+    if (LogInUser?.role == "Member") {
       axios
-        .get(`${apiuri}/getTaskParticularMember/${user.username}`,
+        .get(`${apiuri}/getTaskParticularMember/${LogInUser.username}`,
                   {
                     headers: {
-                      auth: token,
+                      auth: Token,
                     }})
         .then(({ data }) => {
           setAllTasks(data);
