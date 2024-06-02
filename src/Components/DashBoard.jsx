@@ -61,7 +61,6 @@ useEffect(() => {
     }
   }, []);
 
-  console.log(token)
 
   const settings = {
     className: "",
@@ -76,7 +75,7 @@ useEffect(() => {
     focusOnSelect: true,
     waitForAnimate: false,
   };
-  
+
   const handlegetCount=(str)=>{
 
     const count=AllTasks.filter(list=>list.taskStatus === str)
