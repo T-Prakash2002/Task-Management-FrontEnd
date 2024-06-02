@@ -26,7 +26,6 @@ const LoginSlice = createSlice({
                         localStorage.setItem("IsLogIn",true);
                         state.LogInUser = encryptStorage1.getItem('user');
                         state.IsLogIn=true;
-                        // encryptStorage1.setItem('userToken',actions.payload.token)
                         state.Token=actions.payload.token;
 
                 },
