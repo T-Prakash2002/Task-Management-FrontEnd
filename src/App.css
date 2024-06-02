@@ -1,6 +1,5 @@
-.App{
-    background-color:  #e5f2f36e;
-    min-height: 100vh;
+#root{
+    background-color:#e5f2f36e;
 }
 .loginForm{
     display: grid;
