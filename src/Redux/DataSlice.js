@@ -27,6 +27,7 @@ const LoginSlice = createSlice({
                         state.LogInUser = encryptStorage1.getItem('user');
                         state.IsLogIn=true;
                         // encryptStorage1.setItem('userToken',actions.payload.token)
+                        state.Token=actions.payload.token;
 
                 },
 
@@ -34,6 +35,7 @@ const LoginSlice = createSlice({
 
                         state.IsLogIn=false
                         state.LogInUser={}
+                        state.Token='';
                         encryptStorage1.removeItem('user')
                         encryptStorage1.removeItem('MemberList')
                         encryptStorage1.removeItem('userToken')
