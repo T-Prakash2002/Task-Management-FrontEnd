@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { apiuri } from "../constants";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { GetMemberList, GetTaskList,LoadingTrue,LoadingFalse  } from "../Redux/DataSlice";
+import { GetMemberList, GetTaskList  } from "../Redux/DataSlice";
 import Slider from "react-slick";
 
 
@@ -41,9 +41,7 @@ useEffect(() => {
                     }}).then(({ data }) => {
         dispatch(GetTaskList({ data: data }));
         setAllTasks(data);
-        if(data.length==0){
-            dispatch(LoadingFalse())
-          }
+        
       });
     }
     if (user?.role == "Member") {
@@ -58,9 +56,7 @@ useEffect(() => {
 
           setAllTasks(data);
           dispatch(GetTaskList({ data: data }));
-          if(data.length==0){
-            dispatch(LoadingFalse())
-          }
+          
         });
     }
   }, []);
