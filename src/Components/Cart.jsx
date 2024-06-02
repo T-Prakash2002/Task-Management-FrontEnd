@@ -68,6 +68,9 @@ const Cart = ({ data, index, setAllMembers, setAllTasks,AllTasks }) => {
         handleupdatePriority(data._id, r);
       }
     }
+    if(data.status=="Completed"){
+      return "Completed"
+    }
     if(differenceInDays <0){
       return "Overdue Task"
     }
@@ -134,7 +137,10 @@ const Cart = ({ data, index, setAllMembers, setAllTasks,AllTasks }) => {
                 ? "text-danger fw-bold bi bi-circle-fill px-2"
                 : data.Priority == "Important"
                 ? "text-success fw-bold bi bi-circle-fill px-2"
-                : "text-primary fw-bold bi bi-circle-fill px-2"
+                : data.status=="Completed"
+                ?"text-dark fw-bold bi bi-circle-fill px-2"
+                :"text-primary fw-bold bi bi-circle-fill px-2"
+
             }
           ></i>
           {differenceInDay(data)}
