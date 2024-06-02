@@ -22,7 +22,6 @@ const LoginSlice = createSlice({
         reducers: {
                 SignIn: (state, actions) => {
 
-
                         encryptStorage1.setItem("user",actions.payload.data);
                         localStorage.setItem("IsLogIn",true);
                         state.LogInUser = encryptStorage1.getItem('user');

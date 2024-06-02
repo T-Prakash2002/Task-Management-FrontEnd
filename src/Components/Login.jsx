@@ -36,7 +36,7 @@ export default function Login() {
                 `${apiuri}/login?email=${values.email}&password=${values.password}&role=${values.role}`
               );
 
-              if (apiResponse.data !== "Login Failed") {
+              if (apiResponse.data !=="Login Failed") {
                 dispatch(
                   SignIn({
                     data: apiResponse.data._doc,
