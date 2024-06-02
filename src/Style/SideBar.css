@@ -12,12 +12,13 @@
     background-color: rgba(240, 229, 192, 0.685);
     color: rgb(11, 101, 136);
 }
+
 .breadcrumb{
     --bs-breadcrumb-divider:'';
 }
 footer{
   position:relative;
-  top: 150px;
   background-color: rgb(255, 255, 255);
+  top: 15rem;
 
 }

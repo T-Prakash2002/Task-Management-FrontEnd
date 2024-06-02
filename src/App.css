@@ -1,17 +1,21 @@
-#root{
+.App{
+    min-height: 60rem;
     background-color:#e5f2f36e;
+    background-size:cover;
 }
 .loginForm{
     display: grid;
     place-content: center;
 }
-
 .err{
     color: #f35050;
 }
 .slider-container{
-    height: 160px;
+    /* height: 160px; */
 }
 .count{
     font-size:100px;
+}
+.outCard{
+    min-height: 30rem;
 }

@@ -317,7 +317,7 @@ const Task = () => {
         </div>
       </div>
 
-      <div className="row p-3">
+      <div className="row p-3 outCard">
         {TaskListData?.map((task, index) => {
           return (
             <Cart

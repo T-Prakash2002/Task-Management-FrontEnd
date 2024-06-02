@@ -149,7 +149,7 @@ const SideBar = ({ IsLogIn }) => {
 
       {/* Outlet */}
       
-      <div className="row d-flex justify-content-center">
+      <div className="row d-flex justify-content-center outlet">
         
           <Outlet />
         
