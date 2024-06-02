@@ -4,7 +4,7 @@ import { apiuri } from "../constants";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { SignIn, GetMemberList,GetTaskList,LoadingTrue,LoadingFalse } from "../Redux/DataSlice";
+import { SignIn,LoadingTrue,LoadingFalse } from "../Redux/DataSlice";
 import { encryptStorage1 } from "../Encrypt/Encrpt";
 import Loading from '../Loading'
 
@@ -18,15 +18,18 @@ export default function Login() {
 
     <div className="loginForm">
       {
-            IsLoading?<Loading />:""
+        IsLoading?<Loading />:""
       }
       <div className="row">
-        <div className="col ">
+        <div className="col">
           <Formik
+
             initialValues={{ email: "", password: "", role: "" }}
             validationSchema={Loginvalidateform}
+
             onSubmit={async (values, { resetForm }) => {
 
+  
               dispatch(LoadingTrue())
 
               const apiResponse = await axios.get(
@@ -47,54 +50,56 @@ export default function Login() {
 
                 dispatch(LoadingFalse())
 
-                alert("Success");
 
 
-                if (values?.role === "Admin") {
-                  axios
-                    .get(`${apiuri}/getMemberList`, {
-                      headers: {
-                        auth: apiResponse.data.tokenValid,
-                      },
-                    })
-                    .then(({ data }) => {
-                      dispatch(GetMemberList({ data: data }));
-                    })
-                    .catch((err) => {
-                      if (err?.toJSON().message === "Network Error") {
-                        console.log("Backend Connection is poor!!!");
-                      }
-                    });
+//                 if (values?.role === "Admin") {
+//                   
+//                   axios.get(`${apiuri}/getMemberList`, {
+//                       headers:{
+//                         auth: apiResponse.data.tokenValid,
+//                       },
+//                     })
+//                     .then(({ data }) => {
+//                       dispatch(GetMemberList({ data: data }));
+//                     })
+//                     .catch((err) => {
+//                       if (err?.toJSON().message === "Network Error") {
+//                         console.log("Backend Connection is poor!!!");
+//                       }
+//                     });
+// 
+//                   axios.get(`${apiuri}/getTaskList`,{
+//                       headers: {
+//                         auth: apiResponse.data.tokenValid,
+//                       },
+//                     })
+//                     .then(({ data }) => {
+//                       dispatch(GetTaskList({ data: data }));
+//                     });
+//                 }
+//                 if (values?.role == "Member"){
+//                   axios
+//                     .get(`${apiuri}/getTaskParticularMember/${values?.username}`, {
+//                       headers: {
+//                         auth: apiResponse.data.tokenValid,
+//                       },
+//                     })
+//                     .then(({ data }) => {
+//                       dispatch(GetTaskList({ data: data }));
+//                     });
+//                 }
+                resetForm();
 
-                  axios
-                    .get(`${apiuri}/getTaskList`, {
-                      headers: {
-                        auth: apiResponse.data.tokenValid,
-                      },
-                    })
-                    .then(({ data }) => {
-                      dispatch(GetTaskList({ data: data }));
-                    });
-                }
-                if (values?.role == "Member") {
-                  axios
-                    .get(`${apiuri}/getTaskParticularMember/${values?.username}`, {
-                      headers: {
-                        auth: apiResponse.data.tokenValid,
-                      },
-                    })
-                    .then(({ data }) => {
-                      dispatch(GetTaskList({ data: data }));
-                    });
-                }
                 navigate("/");
 
-              } else {
+              }else {
                 alert("User Not Found !");
+                dispatch(LoadingFalse())
               }
-              resetForm();
-            }}
 
+
+             
+            }}
 
           >
             
@@ -102,7 +107,7 @@ export default function Login() {
               <div className="d-flex flex-column">
                 <h3 className="text-center">Login</h3>
                 <hr className="border border-danger border-2 opacity-50" />
-
+                
                 <div className="mb-3">
                   <label htmlFor="email">Email</label>
                   <Field type="text" name="email" className="form-control" />

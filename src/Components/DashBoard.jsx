@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { apiuri } from "../constants";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { GetMemberList, GetTaskList } from "../Redux/DataSlice";
+import { GetMemberList, GetTaskList,LoadingTrue,LoadingFalse  } from "../Redux/DataSlice";
 import Slider from "react-slick";
 
 
@@ -16,7 +16,7 @@ const DashBoard = () => {
   const dispatch = useDispatch();
 
 
-  useEffect(() => {
+useEffect(() => {
     if (user?.role === "Admin") {
       axios
         .get(`${apiuri}/getMemberList`,
@@ -54,6 +54,8 @@ const DashBoard = () => {
                       auth: token,
                     }})
         .then(({ data }) => {
+                    console.log(data)
+
           setAllTasks(data);
           dispatch(GetTaskList({ data: data }));
           if(data.length==0){
@@ -61,7 +63,61 @@ const DashBoard = () => {
           }
         });
     }
+    console.log("hii")
   }, []);
+              
+
+
+// if (user?.role === "Admin") {
+//       axios
+//         .get(`${apiuri}/getMemberList`,
+//                   {
+//                     headers: {
+//                       auth: token,
+//                     }})
+//         .then(({ data }) => {
+//           dispatch(GetMemberList({ data: data }));
+//           setAllMembers(data);
+//         })
+//         .catch((err) => {
+//           if (err.toJSON().message === "Network Error") {
+//             console.log("Backend Connection is poor!!!");
+//           }
+//         });
+// 
+//       axios.get(`${apiuri}/getTaskList`,
+//                   {
+//                     headers: {
+//                       auth: token,
+//                     }}).then(({ data }) => {
+//         dispatch(GetTaskList({ data: data }));
+//         setAllTasks(data);
+//         if(data.length==0){
+//             dispatch(LoadingFalse())
+//           }
+//           console.log(data)
+//       });
+//     }
+//     if (user?.role == "Member") {
+//       axios
+//         .get(`${apiuri}/getTaskParticularMember/${user.username}`,
+//                   {
+//                     headers: {
+//                       auth: token,
+//                     }})
+//         .then(({ data }) => {
+// 
+//           console.log(data)
+// 
+// 
+//           setAllTasks(data);
+//           dispatch(GetTaskList({ data: data }));
+//           if(data.length==0){
+//             dispatch(LoadingFalse())
+//           }
+//         });
+//     }
+
 
 
   const settings = {
@@ -85,7 +141,6 @@ const DashBoard = () => {
     return count.length;
   }
 
-  
   
   return (
     <>
@@ -111,7 +166,6 @@ const DashBoard = () => {
               <h1 className="text-center mt-3 count text-body-secondary">
                 {AllTasks.length}
               </h1>
-              
             </div>
           </div>
         </div>
@@ -148,7 +202,6 @@ const DashBoard = () => {
           </div>
         </div>
 
-       
       </div>
     </>
   );

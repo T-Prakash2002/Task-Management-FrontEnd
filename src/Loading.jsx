@@ -1,11 +1,12 @@
-import React from 'react';
-import './index.css' // Import your CSS file
 
-export default function Loading() {
+import { PropagateLoader } from "react-spinners";
+
+function Loading() {
   return (
     <div className="loading">
-      <div className="spinner"></div>
-      <p>Loading...</p>
+      <PropagateLoader color="#115e47d1" size={30} />
     </div>
   );
 }
+
+export default Loading;

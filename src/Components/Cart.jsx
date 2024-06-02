@@ -6,7 +6,7 @@ import { apiuri } from "../constants";
 import axios from "axios";
 import { EditTask, AboutTask,deleteTask } from "../Redux/DataSlice";
 
-const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
+const Cart = ({ data, index, setAllMembers, setAllTasks,AllTasks }) => {
   
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -15,17 +15,12 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
     (state) => state.LoginDetails
   );
 
-  const user = useSelector((state) => state.LoginDetails.LogInUser);
-  const token = useSelector((state) => state.LoginDetails.Token);
-  const info = useSelector((state) => state.LoginDetails?.InfoTask);
-
-
   useEffect(() => {
     if (LogInUser.role === "Admin") {
       axios
         .get(`${apiuri}/getMemberList`, {
           headers: {
-            auth: token,
+            auth: Token,
           },
         })
         .then(({ data }) => {
@@ -37,7 +32,7 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
       axios
         .get(`${apiuri}/getTaskList`, {
           headers: {
-            auth: token,
+            auth: Token,
           },
         })
         .then(({ data }) => {
@@ -51,7 +46,7 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
       axios
         .get(`${apiuri}/getTaskParticularMember/${LogInUser.username}`, {
           headers: {
-            auth: token,
+            auth: Token,
           },
         })
         .then(({ data }) => {
@@ -89,7 +84,7 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
         },
         {
           headers: {
-            auth: token,
+            auth: Token,
           },
         }
       )
@@ -103,10 +98,10 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
 
   const handleChangeStatus = async (val, id) => {
     let remin = false;
-    if (val == "Completed") {
-      remin = false;
-    } else {
+    if (val == "Pending") {
       remin = true;
+    }else {
+      remin = false;
     }
 
     const apiRes = await axios.put(
@@ -117,7 +112,7 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
       },
       {
         headers: {
-          auth: token,
+          auth: Token,
         },
       }
     );
@@ -130,16 +125,16 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
   };
 
   return (
-    <div className="col-12 col-sm-6 col-md-4 col-lg-3">
+    <div className="col-12 col-sm-6 col-md-4">
       <div className="card p-3" key={index}>
         <sup>
           <i
             className={
               data.Priority == "Priority"
-                ? "text-danger fw-bold bi bi-circle-fill mx-2"
+                ? "text-danger fw-bold bi bi-circle-fill px-2"
                 : data.Priority == "Important"
-                ? "text-success fw-bold bi bi-circle-fill mx-2"
-                : "text-primary fw-bold bi bi-circle-fill mx-2"
+                ? "text-success fw-bold bi bi-circle-fill px-2"
+                : "text-primary fw-bold bi bi-circle-fill px-2"
             }
           ></i>
           {differenceInDay(data)}
@@ -220,12 +215,16 @@ const Cart = ({ data, index, setAllMembers, setAllTasks, TaskList }) => {
                 className="bi bi-trash btn"
                 title="Delete"
                 onClick={async (e) => {
+
+                    setAllTasks((preTask)=>{
+                      return preTask.filter(item=>data._id !== item._id)
+                    })
                   
                     const apiRes = await axios.delete(
                       `${apiuri}/deleteParticularTask/${data._id}`,
                       {
                         headers: {
-                          auth: token,
+                          auth: Token,
                         },
                       }
                     );

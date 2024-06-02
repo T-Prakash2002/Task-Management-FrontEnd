@@ -3,8 +3,8 @@ import "../Style/SideBar.css";
 import { Outlet, Link, NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { SignOut } from "../Redux/DataSlice";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
+// import { useLocation } from "react-router-dom";
 
 
 
@@ -16,11 +16,11 @@ const SideBar = ({ IsLogIn }) => {
 
   return (
     <>
-      <div>
+      <div className="sidebar">
         <nav className="navbar navbar-expand-md navbar-light bg-body-tertiary border">
           <div className="container-fluid">
             <Link className="navbar-brand" to="/">
-              <i className=" text-muted fs-6">Task Management</i>
+              <i className=" text-muted fs-6"><b>Task Management</b></i>
             </Link>
             <button
               className="navbar-toggler btn"
@@ -41,18 +41,18 @@ const SideBar = ({ IsLogIn }) => {
                 <ul className="navbar-nav me-auto mb-lg-0">
                   <li className="nav-item">
                     <NavLink to={"/dashboard"} className="nav-link ">
-                      <span className=" mx-2">DashBoard</span>
+                      <span className=" px-2">DashBoard</span>
                     </NavLink>
                   </li>
                   <li className="nav-item">
                     <NavLink to={"/task"} className="nav-link  ">
-                      <span className="mx-2">Task</span>
+                      <span className="px-2">Task</span>
                     </NavLink>
                   </li>
                   {user?.role == "Admin" ? (
                     <li className="nav-item">
                       <NavLink to={"/register"} className="nav-link  ">
-                        <span className="mx-2">Add Users</span>
+                        <span className="px-2">Add Users</span>
                       </NavLink>
                     </li>
                   ) : (
@@ -61,7 +61,7 @@ const SideBar = ({ IsLogIn }) => {
                   {user?.role == "Admin" ? (
                     <li className="nav-item">
                       <NavLink to={"/members"} className="nav-link  ">
-                        <span className="mx-2">Members</span>
+                        <span className="px-2">Members</span>
                       </NavLink>
                     </li>
                   ) : (
@@ -117,7 +117,7 @@ const SideBar = ({ IsLogIn }) => {
 
                   <Link to="/login">
                     <span className="fw-bold btn btn-outline-dark">
-                      <i className="bi bi-person-fill-add me-3 mx-2"></i>
+                      <i className="bi bi-person-fill-add me-3 px-2"></i>
                       SIGN IN
                     </span>
                   </Link>
@@ -128,8 +128,8 @@ const SideBar = ({ IsLogIn }) => {
         </nav>
       </div>
 
-      <div className="row ms-3 mt-2">
-        <nav className="breadcrumb ms-5" aria-label="breadcrumb">
+      <div className="row pt-2 ps-5">
+        {/* <nav className="breadcrumb" aria-label="breadcrumb"> */}
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
               <Link to="" className="text-decoration-none">
@@ -144,11 +144,11 @@ const SideBar = ({ IsLogIn }) => {
               ""
             )}
           </ol>
-        </nav>
       </div>
 
 
       {/* Outlet */}
+      
       <div className="row d-flex justify-content-center">
         
           <Outlet />
