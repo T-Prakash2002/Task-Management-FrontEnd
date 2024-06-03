@@ -36,6 +36,7 @@ Following are the major dependencies of the project:
 - @reduxjs/toolkit
 - react-router-dom
 - react-slick
+- react-spinners
 - yup
 - bcryptjs
 - body-parser
