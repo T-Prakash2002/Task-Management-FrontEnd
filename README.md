@@ -9,6 +9,21 @@
 ![Task](./src/img/task.png)
 
 
+
+## LogIn Profiles:
+
+### admin LogIn:
+- userEmail: admin@gmail.com ,
+  password:admin
+### member LogIn:
+
+- userEmail: member1@gmail.com ,
+  password:member1
+
+- userEmail: member2@gmail.com ,
+  password:member2
+
+
 ## Tools and Technologies
 
 - HTML
